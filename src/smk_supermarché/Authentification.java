@@ -7,6 +7,7 @@ package smk_supermarché;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import java.sql.*;
 
 /**
  *
@@ -120,7 +121,7 @@ public class Authentification extends javax.swing.JFrame {
             }
         });
 
-        cmbPoste.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "choisir", "DG", "CAISSIER", "RH", "COMPTABLE" }));
+        cmbPoste.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "choisir", "DG", "CAISSIER", "RH", "Logisticien" }));
         cmbPoste.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cmbPosteMouseClicked(evt);
@@ -160,6 +161,11 @@ public class Authentification extends javax.swing.JFrame {
         valbtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 valbtnActionPerformed(evt);
+            }
+        });
+        valbtn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                valbtnKeyPressed(evt);
             }
         });
 
@@ -326,10 +332,35 @@ public class Authentification extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Vide non autorisé");
         }
         else{
-            menu Menu=new menu();
-            Menu.setVisible(true);
-            this.dispose();
+            try {
+                String NumeroMatr=txtnumat.getText();
+                String role=cmbPoste.getSelectedItem().toString();
+                String pass=mpass.getText();
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                String sql="SELECT * FROM  personnels WHERE Matr LIKE ? AND Rôle LIKE ? AND Mpass LIKE ?";
+                PreparedStatement pst = conx.prepareStatement(sql);
+                pst.setString(1, NumeroMatr);
+                pst.setString(2, role);
+                pst.setString(3, pass);
+                ResultSet res = pst.executeQuery();
+                if(res.next()){
+                    menu Menu=new menu(role);
+                    Menu.setVisible(true);
+                    this.dispose();
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Non Trouvé");
+                    txtnumat.requestFocus();
+                    cmbPoste.setSelectedIndex(0);
+                    mpass.setText("");
+                }
+            } 
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
         }
+            
     }//GEN-LAST:event_valbtnActionPerformed
 
     private void txtnumatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnumatKeyPressed
@@ -400,6 +431,44 @@ public class Authentification extends javax.swing.JFrame {
             voir.setText("Cacher");
         }
     }//GEN-LAST:event_voirActionPerformed
+
+    private void valbtnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_valbtnKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtnumat.getText().isBlank()|| cmbPoste.getSelectedIndex()==0||mpass.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Vide non autorisé");
+            }
+            else{
+                try {
+                    String NumeroMatr=txtnumat.getText();
+                    String role=cmbPoste.getSelectedItem().toString();
+                    String pass=mpass.getText();
+                    Class.forName("org.sqlite.JDBC");
+                    Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                    String sql="SELECT * FROM  personnels WHERE Matr LIKE ? AND Rôle LIKE ? AND Mpass LIKE ?";
+                    PreparedStatement pst = conx.prepareStatement(sql);
+                    pst.setString(1, NumeroMatr);
+                    pst.setString(2, role);
+                    pst.setString(3, pass);
+                    ResultSet res = pst.executeQuery();
+                    if(res.next()){
+                        menu Menu=new menu(role);
+                        Menu.setVisible(true);
+                        this.dispose();
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(this, "Non Trouvé");
+                        txtnumat.requestFocus();
+                        cmbPoste.setSelectedIndex(0);
+                        mpass.setText("");
+                    }
+                } 
+                catch (Exception e) {
+                    JOptionPane.showMessageDialog(this, "Erreur"+e);
+                }
+            }
+        }
+    }//GEN-LAST:event_valbtnKeyPressed
 
     /**
      * @param args the command line arguments

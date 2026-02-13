@@ -4,6 +4,10 @@
  */
 package smk_supermarché;
 
+import javax.swing.JOptionPane;
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author mengi
@@ -11,6 +15,7 @@ package smk_supermarché;
 public class logisticien extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(logisticien.class.getName());
+    private String role;
 
     /**
      * Creates new form logisticien
@@ -29,9 +34,9 @@ public class logisticien extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tb = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        valbtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         btnret = new javax.swing.JButton();
@@ -43,14 +48,14 @@ public class logisticien extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        txtcd = new javax.swing.JTextField();
+        txtnomarch = new javax.swing.JTextField();
+        txtnumfac = new javax.swing.JTextField();
+        txtPU = new javax.swing.JTextField();
+        txtPA = new javax.swing.JTextField();
+        txtQt = new javax.swing.JTextField();
+        cmbcatg = new javax.swing.JComboBox<>();
+        txtCdfiss = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jTextField5 = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
@@ -59,23 +64,38 @@ public class logisticien extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tb.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Code marchandise", "Nom marchandise", "Numero Facture", "Categorie", "Prix Unitaire", "Prix d'achat", "Quantité marchandise", "Code fournisseur"
+                "Code marchandise", "Nom marchandise", "Numero Facture", "Categorie", "Prix Unitaire", "Prix d'achat", "Quantité marchandise", "Code fournisseur", "Prix Total"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tb);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
-        jButton1.setBackground(new java.awt.Color(102, 0, 204));
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("VALIDER");
+        valbtn.setBackground(new java.awt.Color(102, 0, 204));
+        valbtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        valbtn.setForeground(new java.awt.Color(255, 255, 255));
+        valbtn.setText("VALIDER");
+        valbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                valbtnActionPerformed(evt);
+            }
+        });
+        valbtn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                valbtnKeyPressed(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(102, 0, 204));
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -129,36 +149,88 @@ public class logisticien extends javax.swing.JFrame {
         jLabel13.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel13.setText("Code fournisseur:");
 
-        jTextField1.setText("jTextField1");
-
-        jTextField3.setText("jTextField3");
-
-        jTextField4.setText("jTextField4");
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+        txtcd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtcdKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtcdKeyTyped(evt);
             }
         });
 
-        jTextField6.setText("jTextField6");
-
-        jTextField7.setText("jTextField7");
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+        txtnomarch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtnomarchKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtnomarchKeyTyped(evt);
             }
         });
 
-        jTextField8.setText("jTextField8");
-        jTextField8.addActionListener(new java.awt.event.ActionListener() {
+        txtnumfac.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField8ActionPerformed(evt);
+                txtnumfacActionPerformed(evt);
+            }
+        });
+        txtnumfac.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtnumfacKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtnumfacKeyTyped(evt);
             }
         });
 
-        jTextField9.setText("jTextField9");
+        txtPU.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPUKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPUKeyTyped(evt);
+            }
+        });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fruits", "Boissons", "Gâteau", "Chocolat" }));
+        txtPA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPAActionPerformed(evt);
+            }
+        });
+        txtPA.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtPAKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPAKeyTyped(evt);
+            }
+        });
+
+        txtQt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtQtActionPerformed(evt);
+            }
+        });
+        txtQt.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtQtKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtQtKeyTyped(evt);
+            }
+        });
+
+        cmbcatg.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "choisir", "Fruits", "Boissons", "Gâteau", "Chocolat" }));
+        cmbcatg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbcatgActionPerformed(evt);
+            }
+        });
+
+        txtCdfiss.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Choisir", "Item 2", "Item 3", "Item 4" }));
+        txtCdfiss.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCdfissActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -170,7 +242,7 @@ public class logisticien extends javax.swing.JFrame {
                         .addGap(17, 17, 17)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(valbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 17, Short.MAX_VALUE))
@@ -199,10 +271,8 @@ public class logisticien extends javax.swing.JFrame {
                                             .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                         .addGap(18, 18, 18)
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                                .addComponent(jTextField9)
-                                                .addGap(12, 12, 12))
-                                            .addComponent(jTextField8)))))
+                                            .addComponent(txtQt)
+                                            .addComponent(txtCdfiss, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -213,13 +283,13 @@ public class logisticien extends javax.swing.JFrame {
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
-                                            .addComponent(jTextField3)
-                                            .addComponent(jTextField4))
+                                            .addComponent(txtcd, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                                            .addComponent(txtnomarch)
+                                            .addComponent(txtnumfac))
                                         .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(jTextField6)
-                                    .addComponent(jTextField7)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(txtPU)
+                                    .addComponent(txtPA)
+                                    .addComponent(cmbcatg, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(41, 41, 41)))
                 .addContainerGap())
         );
@@ -228,44 +298,41 @@ public class logisticien extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnret)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12)
-                            .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel13))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtcd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtnomarch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtnumfac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(cmbcatg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtPU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(txtPA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(txtQt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(txtCdfiss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(valbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
@@ -350,28 +417,28 @@ public class logisticien extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
+    private void txtQtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtQtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField8ActionPerformed
+    }//GEN-LAST:event_txtQtActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void txtPAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPAActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_txtPAActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void txtnumfacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnumfacActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_txtnumfacActionPerformed
 
     private void btnretActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnretActionPerformed
         // TODO add your handling code here:
-        menu Menu= new menu();
+        menu Menu= new menu("Logisticien");
         Menu.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnretActionPerformed
@@ -379,6 +446,239 @@ public class logisticien extends javax.swing.JFrame {
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
+
+    private void txtcdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcdKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtcd.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Vides non autorisés");
+            }
+            else{
+                txtnomarch.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtcdKeyPressed
+
+    private void txtnomarchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnomarchKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtnomarch.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Vides non autorisés");
+            }
+            else{
+                txtnumfac.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtnomarchKeyPressed
+
+    private void txtnomarchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnomarchKeyTyped
+        // TODO add your handling code here:
+        char numbr=evt.getKeyChar();
+        if(Character.isDigit(numbr)){
+            evt.consume();
+        }
+        else if(txtnomarch.getText().length()==25){
+           JOptionPane.showMessageDialog(this, "Pas plus de 25 caractère pour le nom");
+        }
+        
+    }//GEN-LAST:event_txtnomarchKeyTyped
+
+    private void txtnumfacKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnumfacKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtnumfac.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this,"Vides non autorisés");
+            }
+            else{
+                cmbcatg.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtnumfacKeyPressed
+
+    private void txtnumfacKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnumfacKeyTyped
+        // TODO add your handling code here:
+        char numbr=evt.getKeyChar();
+        if(!Character.isDigit(numbr)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtnumfacKeyTyped
+
+    private void cmbcatgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbcatgActionPerformed
+        // TODO add your handling code here:
+        txtPU.requestFocus();
+    }//GEN-LAST:event_cmbcatgActionPerformed
+
+    private void txtPUKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPUKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtPU.getText().isBlank()){
+                JOptionPane.showMessageDialog(this, "Zones vide non autorisées");
+            }
+            else{
+                txtPA.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtPUKeyPressed
+
+    private void txtPUKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPUKeyTyped
+        // TODO add your handling code here:
+        char numbr=evt.getKeyChar();
+        if(!Character.isDigit(numbr)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPUKeyTyped
+
+    private void txtPAKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPAKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtPA.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Zones vide non autoriésées");
+            }
+            else{
+                txtQt.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtPAKeyPressed
+
+    private void txtPAKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPAKeyTyped
+        // TODO add your handling code here:
+        char numbr=evt.getKeyChar();
+        if(!Character.isDigit(numbr)){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtPAKeyTyped
+
+    private void txtQtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQtKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtQt.getText().isBlank()){
+                JOptionPane.showMessageDialog(this, "Zones vide non autorisées");
+            }
+            else{
+                txtCdfiss.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtQtKeyPressed
+
+    private void txtQtKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtQtKeyTyped
+        // TODO add your handling code here:
+        char numbr=evt.getKeyChar();
+        if(!Character.isDigit(numbr)){
+           evt.consume();
+        }
+    }//GEN-LAST:event_txtQtKeyTyped
+
+    private void txtcdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcdKeyTyped
+        // TODO add your handling code here:
+        if(txtcd.getText().length()==8){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtcdKeyTyped
+
+    private void valbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valbtnActionPerformed
+        // TODO add your handling code here:
+        if(txtcd.getText().isEmpty()||txtnomarch.getText().isEmpty()||txtnumfac.getText().isEmpty()||cmbcatg.getSelectedIndex()==0||txtPU.getText().isEmpty()||txtPA.getText().isEmpty()||txtQt.getText().isEmpty()||txtCdfiss.getSelectedIndex()==0){
+            JOptionPane.showMessageDialog(this,"Vides non autorisées");
+        }
+        else{
+            try {
+                String CodeMarchandise=txtcd.getText();
+                String nom=txtnomarch.getText();
+                int fac=Integer.parseInt(txtnumfac.getText());
+                String catg=cmbcatg.getSelectedItem().toString();
+                double PU=Double.parseDouble(txtPU.getText());
+                double PA=Double.parseDouble(txtPA.getText());
+                double qt=Double.parseDouble(txtQt.getText());
+                String cdfiss=txtCdfiss.getSelectedItem().toString();
+                Double tot=PU*qt;
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                Statement enreg=conx.createStatement();
+                Boolean L2=enreg.execute("insert into Marchandises(CodeMarch,Nomarch,Numfac,Type,PA,Qt,Cdfiss,PU,PrixTot)values"+"('"+CodeMarchandise+"','"+nom+"','"+fac+"','"+catg+"','"+PU+"','"+PA+"','"+qt+"','"+cdfiss+"','"+tot+"')");
+                if(!L2){
+                    JOptionPane.showMessageDialog(this, "Enregistré avec succèes");
+                    DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
+                    tbl.addRow(new Object[]{CodeMarchandise,nom,fac,catg,PU,PA,qt,cdfiss,tot});
+                    txtcd.setText("");
+                    txtnomarch.setText("");
+                    txtnumfac.setText("");
+                    cmbcatg.setSelectedIndex(0);
+                    txtPU.setText("");
+                    txtPA.setText("");
+                    txtQt.setText("");
+                    txtCdfiss.setSelectedIndex(0);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,"Erreur"+e);
+            }
+            
+        }
+    }//GEN-LAST:event_valbtnActionPerformed
+
+    private void valbtnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_valbtnKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtcd.getText().isEmpty()||txtnomarch.getText().isEmpty()||txtnumfac.getText().isEmpty()||cmbcatg.getSelectedIndex()==0||txtPU.getText().isEmpty()||txtPA.getText().isEmpty()||txtQt.getText().isEmpty()||txtCdfiss.getSelectedIndex()==0){
+            JOptionPane.showMessageDialog(this,"Vides non autorisées");
+            }
+            else{
+                try {
+                    String CodeMarchandise=txtcd.getText();
+                    String nom=txtnomarch.getText();
+                    int fac=Integer.parseInt(txtnumfac.getText());
+                    String catg=cmbcatg.getSelectedItem().toString();
+                    double PU=Double.parseDouble(txtPU.getText());
+                    double PA=Double.parseDouble(txtPA.getText());
+                    double qt=Double.parseDouble(txtQt.getText());
+                    String cdfiss=txtCdfiss.getSelectedItem().toString();
+                    Double tot=PU*qt;
+                    Class.forName("org.sqlite.JDBC");
+                    Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                    Statement enreg=conx.createStatement();
+                    Boolean L2=enreg.execute("insert into Marchandises(CodeMarch,Nomarch,Numfac,Type,PA,Qt,Cdfiss,PU,PrixTot)values"+"('"+CodeMarchandise+"','"+nom+"','"+fac+"','"+catg+"','"+PU+"','"+PA+"','"+qt+"','"+cdfiss+"','"+tot+"')");
+                    if(!L2){
+                        JOptionPane.showMessageDialog(this, "Enregistré avec succèes");
+                        DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
+                        tbl.addRow(new Object[]{CodeMarchandise,nom,fac,catg,PU,PA,qt,cdfiss,tot});
+                        txtcd.setText("");
+                        txtnomarch.setText("");
+                        txtnumfac.setText("");
+                        cmbcatg.setSelectedIndex(0);
+                        txtPU.setText("");
+                        txtPA.setText("");
+                        txtQt.setText("");
+                        txtCdfiss.setSelectedIndex(0);
+                    }
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(this,"Erreur"+e);
+                }
+
+            }
+        }
+    }//GEN-LAST:event_valbtnKeyPressed
+
+    private void txtCdfissActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCdfissActionPerformed
+        // TODO add your handling code here:
+        valbtn.requestFocus();
+    }//GEN-LAST:event_txtCdfissActionPerformed
+    private void Changercmbfiss(){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+            String sql="SELECT Codefiss from fournisseurs";
+            PreparedStatement pst=conx.prepareStatement(sql);
+            ResultSet rst=pst.executeQuery();
+            if(rst.next()){
+                txtCdfiss.removeAllItems();
+                txtCdfiss.addItem(rst.getString("Codefiss"));
+            }
+        } catch (Exception e) {
+        }
+    }
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        Changercmbfiss();
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -407,10 +707,9 @@ public class logisticien extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnret;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> cmbcatg;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -423,18 +722,17 @@ public class logisticien extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JTable tb;
+    private javax.swing.JComboBox<String> txtCdfiss;
+    private javax.swing.JTextField txtPA;
+    private javax.swing.JTextField txtPU;
+    private javax.swing.JTextField txtQt;
+    private javax.swing.JTextField txtcd;
+    private javax.swing.JTextField txtnomarch;
+    private javax.swing.JTextField txtnumfac;
+    private javax.swing.JButton valbtn;
     // End of variables declaration//GEN-END:variables
 }

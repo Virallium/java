@@ -6,7 +6,8 @@ package smk_supermarché;
 
 import java.awt.Menu;
 import javax.swing.JOptionPane;
-
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author mengi
@@ -36,7 +37,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        Btnretour = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -60,10 +61,12 @@ public class Admin_create_personnel extends javax.swing.JFrame {
         mpass = new javax.swing.JPasswordField();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        BtnEnreg = new javax.swing.JButton();
         voir = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        txtmention = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbpersonnel = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
         jTextField5 = new javax.swing.JTextField();
 
@@ -93,13 +96,13 @@ public class Admin_create_personnel extends javax.swing.JFrame {
             }
         });
 
-        jButton6.setBackground(new java.awt.Color(102, 0, 204));
-        jButton6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton6.setForeground(new java.awt.Color(255, 255, 255));
-        jButton6.setText("Rétour");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        Btnretour.setBackground(new java.awt.Color(102, 0, 204));
+        Btnretour.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Btnretour.setForeground(new java.awt.Color(255, 255, 255));
+        Btnretour.setText("Rétour");
+        Btnretour.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                BtnretourActionPerformed(evt);
             }
         });
 
@@ -118,7 +121,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Btnretour, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28))
         );
         jPanel2Layout.setVerticalGroup(
@@ -132,7 +135,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(Btnretour, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
@@ -269,7 +272,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
             }
         });
 
-        role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "choisir", "ADMIN", "CAISSIER", "RH", "COMPTABLE" }));
+        role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "choisir", "CAISSIER", "Logisticien" }));
         role.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roleActionPerformed(evt);
@@ -279,6 +282,11 @@ public class Admin_create_personnel extends javax.swing.JFrame {
         mpass.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 mpassActionPerformed(evt);
+            }
+        });
+        mpass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                mpassKeyPressed(evt);
             }
         });
 
@@ -292,10 +300,20 @@ public class Admin_create_personnel extends javax.swing.JFrame {
         jButton3.setForeground(new java.awt.Color(255, 255, 255));
         jButton3.setText("Supprimer");
 
-        jButton4.setBackground(new java.awt.Color(102, 0, 204));
-        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton4.setForeground(new java.awt.Color(255, 255, 255));
-        jButton4.setText("Enregistrer");
+        BtnEnreg.setBackground(new java.awt.Color(102, 0, 204));
+        BtnEnreg.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        BtnEnreg.setForeground(new java.awt.Color(255, 255, 255));
+        BtnEnreg.setText("Enregistrer");
+        BtnEnreg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEnregActionPerformed(evt);
+            }
+        });
+        BtnEnreg.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                BtnEnregKeyPressed(evt);
+            }
+        });
 
         voir.setBackground(new java.awt.Color(102, 0, 204));
         voir.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -304,6 +322,17 @@ public class Admin_create_personnel extends javax.swing.JFrame {
         voir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 voirActionPerformed(evt);
+            }
+        });
+
+        jLabel14.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel14.setText("Mention:");
+        jLabel14.setHorizontalTextPosition(javax.swing.SwingConstants.LEADING);
+
+        txtmention.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtmentionKeyPressed(evt);
             }
         });
 
@@ -330,7 +359,8 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                             .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtprn)
@@ -340,20 +370,26 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                     .addComponent(mpass)
                     .addComponent(txtnom)
                     .addComponent(txtpost)
-                    .addComponent(numat))
+                    .addComponent(numat)
+                    .addComponent(txtmention))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
+                    .addComponent(BtnEnreg, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
+                        .addGap(181, 181, 181)
+                        .addComponent(BtnEnreg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -383,22 +419,20 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel12)
                             .addComponent(role, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGap(175, 175, 175)
-                        .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel13)
+                            .addComponent(mpass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(voir))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(mpass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2)
-                    .addComponent(voir))
+                    .addComponent(jLabel14)
+                    .addComponent(txtmention, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbpersonnel.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -406,7 +440,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                 "Matricul", "Nom", "Post-Nom", "Prenom", "Date embauche", "Date de naissance", "Rôle", "Mot de passe"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbpersonnel);
 
         jPanel6.setBackground(new java.awt.Color(102, 0, 204));
 
@@ -510,7 +544,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
         // TODO add your handling code here:
         char numbr=evt.getKeyChar();
         if(!Character.isDigit(numbr)){
-            if(txtnom.getText().length()==8){
+            if(txtnom.getText().length()==25){
                 JOptionPane.showMessageDialog(this,"Seuls 8 caractères sont autorisées");
             }
         }
@@ -535,7 +569,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
         // TODO add your handling code here:
         char numbr=evt.getKeyChar();
         if(!Character.isDigit(numbr)){
-            if(txtpost.getText().length()==8){
+            if(txtpost.getText().length()==25){
                 JOptionPane.showMessageDialog(this,"Seuls 8 caractères sont autorisées");
             }
         }
@@ -572,7 +606,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
         // TODO add your handling code here:
         char numbr=evt.getKeyChar();
         if(!Character.isDigit(numbr)){
-            if(txtprn.getText().length()==8){
+            if(txtprn.getText().length()==25){
                 JOptionPane.showMessageDialog(this,"Seuls 8 caractères sont autorisées");
             }
         }
@@ -586,16 +620,17 @@ public class Admin_create_personnel extends javax.swing.JFrame {
         mpass.requestFocus();
     }//GEN-LAST:event_roleActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void BtnretourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnretourActionPerformed
         // TODO add your handling code here:
-        menu Menu=new menu();
+        menu Menu=new menu("RH");
         Menu.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_BtnretourActionPerformed
 
     private void voirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voirActionPerformed
         // TODO add your handling code here:
-        if(mpass.getEchoChar()=='\u0000'){
+        char c=mpass.getEchoChar();
+        if(c==0){
             mpass.setEchoChar('*');
             voir.setText("Voir");
         }
@@ -604,6 +639,113 @@ public class Admin_create_personnel extends javax.swing.JFrame {
               voir.setText("Cacher");
         }
     }//GEN-LAST:event_voirActionPerformed
+
+    private void BtnEnregActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEnregActionPerformed
+        // TODO add your handling code here:
+        if(numat.getText().isEmpty()||txtnom.getText().isEmpty()||txtpost.getText().isEmpty()||txtprn.getText().isEmpty()||Dtembauche.getDate()==null||Dtnaiss.getDate()==null||role.getSelectedIndex()==0||mpass.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Zone vides non autorisées");
+        }
+        else{
+            try {
+                String numatr=numat.getText();
+                String nom_personnel=txtnom.getText();
+                String postnom=txtpost.getText();
+                String prenom=txtprn.getText();
+                String date_embauche=Dtembauche.getDate().toString();
+                String datenais=Dtnaiss.getDate().toString();
+                String role_utilisateur=role.getSelectedItem().toString();
+                String mpass_personnel=mpass.getText();
+                String mention=txtmention.getText();
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                Statement enreg=conx.createStatement();
+                Boolean L2=enreg.execute("insert into personnels(Matr,Nom,Postnom,Prenom,DateEmbauche,Datenais,Rôle,Mpass,Mention) values"+"('"+numatr+"','"+nom_personnel+"','"+postnom+"','"+prenom+"','"+date_embauche+"','"+datenais+"','"+role_utilisateur+"','"+mpass_personnel+"','"+mention+"')");
+                if (!L2){
+                    JOptionPane.showMessageDialog(this, "Ligne Ajoutée Avec succès");
+                    DefaultTableModel tblpersonnel=(DefaultTableModel)tbpersonnel.getModel();
+                    tblpersonnel.addRow(new Object[]{numatr,nom_personnel,postnom,date_embauche,datenais,role_utilisateur,mpass_personnel});
+                    numat.setText("");
+                    txtnom.setText("");
+                    txtpost.setText("");
+                    txtprn.setText("");
+                    Dtembauche.setDate(null);
+                    Dtnaiss.setDate(null);
+                    role.setSelectedIndex(0);
+                    mpass.setText("");
+                    txtmention.setText("");
+                }
+            }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
+        }
+        
+    }//GEN-LAST:event_BtnEnregActionPerformed
+
+    private void mpassKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_mpassKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(mpass.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this,"vides non autorisés");
+            }
+            else{
+                txtmention.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_mpassKeyPressed
+
+    private void txtmentionKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtmentionKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtmention.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Zone vides non autorisées ");
+            }
+            else{
+                BtnEnreg.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtmentionKeyPressed
+
+    private void BtnEnregKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_BtnEnregKeyPressed
+        // TODO add your handling code here:
+        if(numat.getText().isEmpty()||txtnom.getText().isEmpty()||txtpost.getText().isEmpty()||txtprn.getText().isEmpty()||Dtembauche.getDate()==null||Dtnaiss.getDate()==null||role.getSelectedIndex()==0||mpass.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this, "Zone vides non autorisées");
+        }
+        else{
+            try {
+                String numatr=numat.getText();
+                String nom_personnel=txtnom.getText();
+                String postnom=txtpost.getText();
+                String prenom=txtprn.getText();
+                String date_embauche=Dtembauche.getDate().toString();
+                String datenais=Dtnaiss.getDate().toString();
+                String role_utilisateur=role.getSelectedItem().toString();
+                String mpass_personnel=mpass.getText();
+                String mention=txtmention.getText();
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                Statement enreg=conx.createStatement();
+                Boolean L2=enreg.execute("insert into personnels(Matr,Nom,Postnom,Prenom,DateEmbauche,Datenais,Rôle,Mpass,Mention) values"+"('"+numatr+"','"+nom_personnel+"','"+postnom+"','"+prenom+"','"+date_embauche+"','"+datenais+"','"+role_utilisateur+"','"+mpass_personnel+"','"+mention+"')");
+                if (!L2){
+                    JOptionPane.showMessageDialog(this, "Ligne Ajoutée Avec succès");
+                    DefaultTableModel tblpersonnel=(DefaultTableModel)tbpersonnel.getModel();
+                    tblpersonnel.addRow(new Object[]{numatr,nom_personnel,postnom,date_embauche,datenais,role_utilisateur,mpass_personnel});
+                    numat.setText("");
+                    txtnom.setText("");
+                    txtpost.setText("");
+                    txtprn.setText("");
+                    Dtembauche.setDate(null);
+                    Dtnaiss.setDate(null);
+                    role.setSelectedIndex(0);
+                    mpass.setText("");
+                    txtmention.setText("");
+                }
+            }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
+        }
+    }//GEN-LAST:event_BtnEnregKeyPressed
 
     /**
      * @param args the command line arguments
@@ -631,19 +773,20 @@ public class Admin_create_personnel extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnEnreg;
+    private javax.swing.JButton Btnretour;
     private com.toedter.calendar.JDateChooser Dtembauche;
     private com.toedter.calendar.JDateChooser Dtnaiss;
     private javax.swing.JLabel img;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -657,11 +800,12 @@ public class Admin_create_personnel extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JPasswordField mpass;
     private javax.swing.JTextField numat;
     private javax.swing.JComboBox<String> role;
+    private javax.swing.JTable tbpersonnel;
+    private javax.swing.JTextField txtmention;
     private javax.swing.JTextField txtnom;
     private javax.swing.JTextField txtpost;
     private javax.swing.JTextField txtprn;

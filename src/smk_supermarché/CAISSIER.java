@@ -5,7 +5,8 @@
 package smk_supermarché;
 
 import javax.swing.JOptionPane;
-
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author mengi
@@ -13,6 +14,7 @@ import javax.swing.JOptionPane;
 public class CAISSIER extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(CAISSIER.class.getName());
+    private String role;
 
     /**
      * Creates new form CAISSIER
@@ -31,7 +33,7 @@ public class CAISSIER extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tb = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jTextField5 = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
@@ -51,26 +53,31 @@ public class CAISSIER extends javax.swing.JFrame {
         txtpost = new javax.swing.JTextField();
         txtprn = new javax.swing.JTextField();
         txttel = new javax.swing.JTextField();
-        txtcdprod = new javax.swing.JTextField();
         quantite = new javax.swing.JTextField();
-        cdfiss = new javax.swing.JTextField();
         combogenr = new javax.swing.JComboBox<>();
+        txtcdprod = new javax.swing.JComboBox<>();
+        cdfiss = new javax.swing.JComboBox<>();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tb.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Code marchandise", "Nom marchandise", "Numero Facture", "Categorie", "Prix Unitaire", "Prix d'achat", "Quantité marchandise", "Code fournisseur"
+                "Code marchandise", "Nom ", "Postnom", "Prenom", "Genre", "Tel", "Quantite", "Code fournisseur", "Fidelite"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(tb);
 
         jPanel5.setBackground(new java.awt.Color(102, 0, 204));
 
@@ -103,6 +110,16 @@ public class CAISSIER extends javax.swing.JFrame {
         btnval.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnval.setForeground(new java.awt.Color(255, 255, 255));
         btnval.setText("VALIDER");
+        btnval.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnvalActionPerformed(evt);
+            }
+        });
+        btnval.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnvalKeyPressed(evt);
+            }
+        });
 
         jButton2.setBackground(new java.awt.Color(102, 0, 204));
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -188,20 +205,6 @@ public class CAISSIER extends javax.swing.JFrame {
             }
         });
 
-        txtcdprod.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcdprodActionPerformed(evt);
-            }
-        });
-        txtcdprod.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtcdprodKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txtcdprodKeyTyped(evt);
-            }
-        });
-
         quantite.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 quantiteActionPerformed(evt);
@@ -216,21 +219,21 @@ public class CAISSIER extends javax.swing.JFrame {
             }
         });
 
-        cdfiss.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                cdfissKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                cdfissKeyReleased(evt);
-            }
-        });
-
         combogenr.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Genre", "M", "F" }));
         combogenr.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 combogenrActionPerformed(evt);
             }
         });
+
+        txtcdprod.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Choisir", "Item 1", "Item 2", "Item 3", "Item 4" }));
+        txtcdprod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcdprodActionPerformed(evt);
+            }
+        });
+
+        cdfiss.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "choisir", "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -272,7 +275,8 @@ public class CAISSIER extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(quantite)
-                                            .addComponent(cdfiss)))))
+                                            .addComponent(txtcdprod, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(cdfiss, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -288,7 +292,6 @@ public class CAISSIER extends javax.swing.JFrame {
                                             .addComponent(txtprn))
                                         .addGap(0, 0, Short.MAX_VALUE))
                                     .addComponent(txttel)
-                                    .addComponent(txtcdprod)
                                     .addComponent(combogenr, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(41, 41, 41)))
                 .addContainerGap())
@@ -298,41 +301,38 @@ public class CAISSIER extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnret)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(txtnom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel7)
-                            .addComponent(txtpost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(txtprn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel9)
-                            .addComponent(combogenr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(txttel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(txtcdprod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12)
-                            .addComponent(quantite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel13))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cdfiss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(txtnom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtpost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(txtprn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(combogenr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txttel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(txtcdprod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(quantite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(cdfiss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnval, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -409,7 +409,7 @@ public class CAISSIER extends javax.swing.JFrame {
 
     private void btnretActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnretActionPerformed
         // TODO add your handling code here:
-        menu Menu= new menu();
+        menu Menu= new menu("CAISSIER");
         Menu.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnretActionPerformed
@@ -417,10 +417,6 @@ public class CAISSIER extends javax.swing.JFrame {
     private void txtprnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtprnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtprnActionPerformed
-
-    private void txtcdprodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcdprodActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtcdprodActionPerformed
 
     private void quantiteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantiteActionPerformed
         // TODO add your handling code here:
@@ -473,18 +469,6 @@ public class CAISSIER extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_combogenrActionPerformed
 
-    private void txtcdprodKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcdprodKeyPressed
-        // TODO add your handling code here:
-        if(evt.getKeyCode()==10){
-            if(txtcdprod.getText().isBlank()){
-                JOptionPane.showMessageDialog(this,"Zone vides non autorisées");
-            }
-            else{
-                quantite.requestFocus();
-            }
-        }
-    }//GEN-LAST:event_txtcdprodKeyPressed
-
     private void quantiteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantiteKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyCode()==10){
@@ -496,18 +480,6 @@ public class CAISSIER extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_quantiteKeyPressed
-
-    private void cdfissKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cdfissKeyPressed
-        // TODO add your handling code here:
-        if(evt.getKeyCode()==10){
-            if(cdfiss.getText().isBlank()){
-                JOptionPane.showMessageDialog(this,"Zone vides non autorisées");
-            }
-            else{
-                btnval.requestFocus();
-            }
-        }
-    }//GEN-LAST:event_cdfissKeyPressed
 
     private void txttelKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttelKeyPressed
         // TODO add your handling code here:
@@ -531,20 +503,9 @@ public class CAISSIER extends javax.swing.JFrame {
             evt.consume();
         }
         else if(txttel.getText().length()==9){
-            JOptionPane.showMessageDialog(this,"Un numéro de téléphone ne comporte que 9 chiffres");
+            JOptionPane.showMessageDialog(this,"Un numéro de téléphone ne doit comporter que 9 chiffres");
         }
     }//GEN-LAST:event_txttelKeyTyped
-
-    private void txtcdprodKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcdprodKeyTyped
-        // TODO add your handling code here:
-        char number=evt.getKeyChar();
-        if(!Character.isDigit(number)){
-            evt.consume();
-        }
-        else if(txtcdprod.getText().length()==14){
-            JOptionPane.showMessageDialog(this,"La limite est de 14 caractères");
-        }
-    }//GEN-LAST:event_txtcdprodKeyTyped
 
     private void quantiteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantiteKeyTyped
         // TODO add your handling code here:
@@ -553,14 +514,118 @@ public class CAISSIER extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_quantiteKeyTyped
-
-    private void cdfissKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cdfissKeyReleased
-        // TODO add your handling code here:
-        char number=evt.getKeyChar();
-        if(!Character.isDigit(number)){
-            evt.consume();
+    private void chargercmb(){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+            String sql="SELECT CodeMarch FROM Marchandises";
+            PreparedStatement pst=conx.prepareStatement(sql);
+            ResultSet rst=pst.executeQuery();
+            txtcdprod.removeAllItems();
+            while(rst.next()){
+                txtcdprod.addItem(rst.getString("CodeMarch"));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,"Erreur"+e);
         }
-    }//GEN-LAST:event_cdfissKeyReleased
+    }
+    private void btnvalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvalActionPerformed
+        // TODO add your handling code here:
+        if(txtnom.getText().isEmpty()||txtpost.getText().isEmpty()||txtprn.getText().isEmpty()||combogenr.getSelectedIndex()==0||txttel.getText().isEmpty()||txtcdprod.getSelectedIndex()==0||quantite.getText().isEmpty()||cdfiss.getSelectedIndex()==0){
+            JOptionPane.showMessageDialog(this, "Zones vides non autorisées");
+            txtnom.requestFocus();
+        }
+        else{
+            try {
+                String nom=txtnom.getText();
+                String postnom=txtpost.getText();
+                String prenom=txtprn.getText();
+                String genre=combogenr.getSelectedItem().toString();
+                int tel=Integer.parseInt(txttel.getText());
+                String codeprod=txtcdprod.getSelectedItem().toString();
+                int quant=Integer.parseInt(quantite.getText());
+                String fournisseurs=cdfiss.getSelectedItem().toString();
+                Class.forName("org.sqlite.JDBC");
+                int fidelite=0;
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                Statement enreg=conx.createStatement();
+                if(quant>10){
+                    fidelite+=1;
+                    Boolean L2=enreg.execute("INSERT INTO Client(Tel,Nom,Prenom,Postnom,Genre,fidelite,cdmarch,fiss)values"+"('"+tel+"','"+nom+"','"+prenom+"','"+postnom+"','"+genre+"','"+fidelite+"','"+codeprod+"','"+fournisseurs+"')");
+                    if(!L2){
+                        JOptionPane.showMessageDialog(this,"Enregistré avec succès");
+                        DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
+                        tbl.addRow(new Object[]{codeprod,nom,postnom,prenom,genre,tel,quant,fournisseurs,fidelite});
+                        txtnom.setText("");
+                        txtpost.setText("");
+                        txtprn.setText("");
+                        combogenr.setSelectedIndex(0);
+                        txttel.setText("");
+                        txtcdprod.setSelectedIndex(0);
+                        quantite.setText("");
+                        cdfiss.setSelectedIndex(0);
+                    }
+                }
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
+        }
+    }//GEN-LAST:event_btnvalActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        chargercmb();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void txtcdprodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcdprodActionPerformed
+        // TODO add your handling code here:
+        quantite.requestFocus();
+    }//GEN-LAST:event_txtcdprodActionPerformed
+
+    private void btnvalKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnvalKeyPressed
+        // TODO add your handling code here:
+        if(txtnom.getText().isEmpty()||txtpost.getText().isEmpty()||txtprn.getText().isEmpty()||combogenr.getSelectedIndex()==0||txttel.getText().isEmpty()||txtcdprod.getSelectedIndex()==0||quantite.getText().isEmpty()||cdfiss.getSelectedIndex()==0){
+            JOptionPane.showMessageDialog(this, "Zones vides non autorisées");
+            txtnom.requestFocus();
+        }
+        else{
+            try {
+                String nom=txtnom.getText();
+                String postnom=txtpost.getText();
+                String prenom=txtprn.getText();
+                String genre=combogenr.getSelectedItem().toString();
+                int tel=Integer.parseInt(txttel.getText());
+                String codeprod=txtcdprod.getSelectedItem().toString();
+                int quant=Integer.parseInt(quantite.getText());
+                String fournisseurs=cdfiss.getSelectedItem().toString();
+                Class.forName("org.sqlite.JDBC");
+                int fidelite=0;
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                Statement enreg=conx.createStatement();
+                if(quant>10){
+                    fidelite+=1;
+                    Boolean L2=enreg.execute("INSERT INTO Client(Tel,Nom,Prenom,Postnom,Genre,fidelite,cdmarch,fiss)values"+"('"+tel+"','"+nom+"','"+prenom+"','"+postnom+"','"+genre+"','"+fidelite+"','"+codeprod+"','"+fournisseurs+"')");
+                    if(!L2){
+                        JOptionPane.showMessageDialog(this,"Enregistré avec succès");
+                        DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
+                        tbl.addRow(new Object[]{codeprod,nom,postnom,prenom,genre,tel,quant,fournisseurs,fidelite});
+                        txtnom.setText("");
+                        txtpost.setText("");
+                        txtprn.setText("");
+                        combogenr.setSelectedIndex(0);
+                        txttel.setText("");
+                        txtcdprod.setSelectedIndex(0);
+                        quantite.setText("");
+                        cdfiss.setSelectedIndex(0);
+                    }
+                }
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
+        }
+    }//GEN-LAST:event_btnvalKeyPressed
 
     /**
      * @param args the command line arguments
@@ -590,7 +655,7 @@ public class CAISSIER extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnret;
     private javax.swing.JButton btnval;
-    private javax.swing.JTextField cdfiss;
+    private javax.swing.JComboBox<String> cdfiss;
     private javax.swing.JComboBox<String> combogenr;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -608,10 +673,10 @@ public class CAISSIER extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField quantite;
-    private javax.swing.JTextField txtcdprod;
+    private javax.swing.JTable tb;
+    private javax.swing.JComboBox<String> txtcdprod;
     private javax.swing.JTextField txtnom;
     private javax.swing.JTextField txtpost;
     private javax.swing.JTextField txtprn;

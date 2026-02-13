@@ -290,7 +290,7 @@
                         <StringItem index="1" value="DG"/>
                         <StringItem index="2" value="CAISSIER"/>
                         <StringItem index="3" value="RH"/>
-                        <StringItem index="4" value="COMPTABLE"/>
+                        <StringItem index="4" value="Logisticien"/>
                       </StringArray>
                     </Property>
                   </Properties>
@@ -340,6 +340,7 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="valbtnActionPerformed"/>
+                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="valbtnKeyPressed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JSeparator" name="jSeparator1">

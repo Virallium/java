@@ -4,6 +4,10 @@
  */
 package smk_supermarché;
 
+import javax.swing.JOptionPane;
+import java.sql.*;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author mengi
@@ -11,12 +15,14 @@ package smk_supermarché;
 public class Marchandises_admin extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Marchandises_admin.class.getName());
+    private String role;
 
     /**
      * Creates new form Marchandises_admin
      */
     public Marchandises_admin() {
         initComponents();
+        this.role=role;
     }
 
     /**
@@ -39,25 +45,25 @@ public class Marchandises_admin extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        jTextField10 = new javax.swing.JTextField();
+        cdfiss = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
-        jTextField11 = new javax.swing.JTextField();
+        txtnom = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
-        jTextField12 = new javax.swing.JTextField();
+        txtprn = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
-        jTextField13 = new javax.swing.JTextField();
-        jTextField14 = new javax.swing.JTextField();
+        txtpost = new javax.swing.JTextField();
+        txtAd = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
-        jTextField16 = new javax.swing.JTextField();
+        txttel = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
-        jTextField17 = new javax.swing.JTextField();
+        txtmail = new javax.swing.JTextField();
         jLabel21 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
+        valbtn = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jTextField5 = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        tb = new javax.swing.JTable();
         btnret = new javax.swing.JButton();
         jTabbedPane4 = new javax.swing.JTabbedPane();
         jPanel8 = new javax.swing.JPanel();
@@ -138,13 +144,30 @@ public class Marchandises_admin extends javax.swing.JFrame {
         jLabel14.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel14.setText("Code fournisseur:");
 
+        cdfiss.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cdfissKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                cdfissKeyTyped(evt);
+            }
+        });
+
         jLabel15.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel15.setText("Nom:");
 
-        jTextField11.addActionListener(new java.awt.event.ActionListener() {
+        txtnom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField11ActionPerformed(evt);
+                txtnomActionPerformed(evt);
+            }
+        });
+        txtnom.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtnomKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtnomKeyTyped(evt);
             }
         });
 
@@ -152,9 +175,17 @@ public class Marchandises_admin extends javax.swing.JFrame {
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel16.setText("Prenom:");
 
-        jTextField12.addActionListener(new java.awt.event.ActionListener() {
+        txtprn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField12ActionPerformed(evt);
+                txtprnActionPerformed(evt);
+            }
+        });
+        txtprn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtprnKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtprnKeyTyped(evt);
             }
         });
 
@@ -162,13 +193,39 @@ public class Marchandises_admin extends javax.swing.JFrame {
         jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel17.setText("Post-Nom:");
 
+        txtpost.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtpostKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtpostKeyTyped(evt);
+            }
+        });
+
+        txtAd.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtAdKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAdKeyTyped(evt);
+            }
+        });
+
         jLabel18.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel18.setText("Adresse:");
 
-        jTextField16.addActionListener(new java.awt.event.ActionListener() {
+        txttel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField16ActionPerformed(evt);
+                txttelActionPerformed(evt);
+            }
+        });
+        txttel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txttelKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txttelKeyTyped(evt);
             }
         });
 
@@ -176,14 +233,33 @@ public class Marchandises_admin extends javax.swing.JFrame {
         jLabel20.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel20.setText("Tel:");
 
+        txtmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtmailKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtmailKeyTyped(evt);
+            }
+        });
+
         jLabel21.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel21.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel21.setText("Mail");
 
-        jButton5.setBackground(new java.awt.Color(0, 204, 51));
-        jButton5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton5.setForeground(new java.awt.Color(255, 255, 255));
-        jButton5.setText("Enregistrer");
+        valbtn.setBackground(new java.awt.Color(0, 204, 51));
+        valbtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        valbtn.setForeground(new java.awt.Color(255, 255, 255));
+        valbtn.setText("Enregistrer");
+        valbtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                valbtnActionPerformed(evt);
+            }
+        });
+        valbtn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                valbtnKeyPressed(evt);
+            }
+        });
 
         jButton6.setBackground(new java.awt.Color(102, 0, 204));
         jButton6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -211,10 +287,10 @@ public class Marchandises_admin extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addComponent(jTextField10, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
+                                .addComponent(cdfiss, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)
                                 .addGap(76, 76, 76))
                             .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtnom, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(77, 77, 77))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -222,9 +298,9 @@ public class Marchandises_admin extends javax.swing.JFrame {
                                 .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtmail, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel7Layout.createSequentialGroup()
-                                        .addComponent(jButton5)
+                                        .addComponent(valbtn)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jButton6)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -232,20 +308,20 @@ public class Marchandises_admin extends javax.swing.JFrame {
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtpost, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtprn, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addComponent(jLabel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtAd, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txttel, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(77, 77, 77))))
         );
         jPanel7Layout.setVerticalGroup(
@@ -254,34 +330,34 @@ public class Marchandises_admin extends javax.swing.JFrame {
                 .addGap(39, 39, 39)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cdfiss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel15)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtnom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16)
-                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtprn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel17)
-                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtpost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
-                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtAd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel20)
-                    .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txttel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel21)
-                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
+                    .addComponent(valbtn)
                     .addComponent(jButton6)
                     .addComponent(jButton7))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -299,7 +375,7 @@ public class Marchandises_admin extends javax.swing.JFrame {
             }
         });
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        tb.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -307,7 +383,7 @@ public class Marchandises_admin extends javax.swing.JFrame {
                 "Code Fournisseur", "Nom", "Prenom", "Post-Nom", "Adresse", "Tel", "Mail"
             }
         ));
-        jScrollPane3.setViewportView(jTable3);
+        jScrollPane3.setViewportView(tb);
 
         btnret.setBackground(new java.awt.Color(102, 0, 204));
         btnret.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -615,17 +691,17 @@ public class Marchandises_admin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton6ActionPerformed
 
-    private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField11ActionPerformed
+    private void txtnomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnomActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField11ActionPerformed
+    }//GEN-LAST:event_txtnomActionPerformed
 
-    private void jTextField12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField12ActionPerformed
+    private void txtprnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtprnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField12ActionPerformed
+    }//GEN-LAST:event_txtprnActionPerformed
 
-    private void jTextField16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField16ActionPerformed
+    private void txttelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttelActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField16ActionPerformed
+    }//GEN-LAST:event_txttelActionPerformed
 
     private void jTextField18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField18ActionPerformed
         // TODO add your handling code here:
@@ -633,10 +709,240 @@ public class Marchandises_admin extends javax.swing.JFrame {
 
     private void btnretActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnretActionPerformed
         // TODO add your handling code here:
-        menu Menu= new menu();
+        menu Menu= new menu("DG");
         Menu.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnretActionPerformed
+
+    private void cdfissKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cdfissKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(cdfiss.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Zone vides non autorisées");
+            }
+            else{
+                txtnom.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_cdfissKeyPressed
+
+    private void txtnomKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnomKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtnom.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this,"Zones vide non autorisées");
+            }
+            else{
+                txtprn.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtnomKeyPressed
+
+    private void txtprnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtprnKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtprn.getText().isBlank()){
+                JOptionPane.showMessageDialog(this,"Zones vide non autorisées");
+            }
+            else{
+                txtpost.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtprnKeyPressed
+
+    private void txtpostKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpostKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtpost.getText().isBlank()){
+                JOptionPane.showMessageDialog(this,"Zones vide non autorisées");
+            }
+            else{
+                txtAd.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtpostKeyPressed
+
+    private void txtAdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAdKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtAd.getText().isBlank()){
+                JOptionPane.showMessageDialog(this,"Zones vide non autorisées");
+            }
+            else{
+                txttel.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtAdKeyPressed
+
+    private void txttelKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttelKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txttel.getText().isBlank()){
+                JOptionPane.showMessageDialog(this,"Zones vide non autorisées");
+            }
+            else{
+                txtmail.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txttelKeyPressed
+
+    private void txtmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtmailKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode()==10){
+            if(txtmail.getText().isBlank()){
+                JOptionPane.showMessageDialog(this,"Zones vide non autorisées");
+            }
+            else{
+                valbtn.requestFocus();
+            }
+        }
+    }//GEN-LAST:event_txtmailKeyPressed
+
+    private void cdfissKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cdfissKeyTyped
+        // TODO add your handling code here:
+        if(cdfiss.getText().length()==8){
+            JOptionPane.showMessageDialog(this,"Pas plus de 8 caractères");
+            evt.consume();
+        }
+    }//GEN-LAST:event_cdfissKeyTyped
+
+    private void txtnomKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnomKeyTyped
+        // TODO add your handling code here:
+        char numbr=evt.getKeyChar();
+        if(Character.isDigit(numbr)){
+            evt.consume();
+        }
+        else if(txtnom.getText().length()==25){
+            JOptionPane.showMessageDialog(this,"Vous ne pouvez pas depacer 25 caractères");
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtnomKeyTyped
+
+    private void txtprnKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtprnKeyTyped
+        // TODO add your handling code here:
+        char numbr=evt.getKeyChar();
+        if(Character.isDigit(numbr)){
+            evt.consume();
+        }
+        else if(txtprn.getText().length()==25){
+            JOptionPane.showMessageDialog(this,"Vous ne pouvez pas depacer 25 caractères");
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtprnKeyTyped
+
+    private void txtpostKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtpostKeyTyped
+        // TODO add your handling code here:
+        char numbr=evt.getKeyChar();
+        if(Character.isDigit(numbr)){
+            evt.consume();
+        }
+        else if(txtpost.getText().length()==25){
+            JOptionPane.showMessageDialog(this,"Vous ne pouvez pas depacer 25 caractères");
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtpostKeyTyped
+
+    private void txtAdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAdKeyTyped
+        // TODO add your handling code here:
+        char numbr=evt.getKeyChar();
+        if(Character.isDigit(numbr)){
+            evt.consume();
+        }
+        else if(txtAd.getText().length()==100){
+            JOptionPane.showMessageDialog(this,"Vous ne pouvez pas depacer 100 caractères");
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtAdKeyTyped
+
+    private void txttelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttelKeyTyped
+        // TODO add your handling code here:
+        char numbr=evt.getKeyChar();
+        if(!Character.isDigit(numbr)){
+            evt.consume();
+        }
+        else if(txttel.getText().length()==9){
+            JOptionPane.showMessageDialog(this,"Vous ne pouvez pas depacer 9 caractères");
+            evt.consume();
+        }
+    }//GEN-LAST:event_txttelKeyTyped
+
+    private void txtmailKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtmailKeyTyped
+        // TODO add your handling code here:
+        if(txtmail.getText().length()==100){
+            JOptionPane.showMessageDialog(this,"Vous ne pouvez pas depacer 100 caractères");
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtmailKeyTyped
+
+    private void valbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valbtnActionPerformed
+        // TODO add your handling code here:
+        if(cdfiss.getText().isEmpty()||txtnom.getText().isEmpty()||txtprn.getText().isEmpty()||txtpost.getText().isBlank()||txtAd.getText().isEmpty()||txttel.getText().isEmpty()||txtmail.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this,"Vide non autorisées");
+        }
+        else{
+            try {
+                String fournisseur=cdfiss.getText();
+                String nom=txtnom.getText();
+                String prenom=txtprn.getText();
+                String post=txtpost.getText();
+                String Ad=txtAd.getText();
+                int telephone=Integer.parseInt(txttel.getText());
+                String mail=txtmail.getText();
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                Statement enreg=conx.createStatement();
+                Boolean L2=enreg.execute("insert into fournisseurs(codefiss,Nom,Prenom,Postnom,Adresse,Tel,Mail)values"+"('"+fournisseur+"','"+nom+"','"+prenom+"','"+post+"','"+Ad+"','"+telephone+"','"+mail+"')");
+                if(!L2){
+                    JOptionPane.showMessageDialog(this,"Enregistrement réussi");
+                    cdfiss.setText("");
+                    txtnom.setText("");
+                    txtprn.setText("");
+                    txtpost.setText("");
+                    txtAd.setText("");
+                    txttel.setText("");
+                    txtmail.setText("");
+                    DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
+                    tbl.addRow(new Object[]{fournisseur,nom,prenom,post,Ad,telephone,mail});
+                }
+            } catch (Exception e) {
+            }
+        }
+    }//GEN-LAST:event_valbtnActionPerformed
+
+    private void valbtnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_valbtnKeyPressed
+        // TODO add your handling code here:
+        if(cdfiss.getText().isEmpty()||txtnom.getText().isEmpty()||txtprn.getText().isEmpty()||txtpost.getText().isBlank()||txtAd.getText().isEmpty()||txttel.getText().isEmpty()||txtmail.getText().isEmpty()){
+            JOptionPane.showMessageDialog(this,"Vide non autorisées");
+        }
+        else{
+            try {
+                String fournisseur=cdfiss.getText();
+                String nom=txtnom.getText();
+                String prenom=txtprn.getText();
+                String post=txtpost.getText();
+                String Ad=txtAd.getText();
+                int telephone=Integer.parseInt(txttel.getText());
+                String mail=txtmail.getText();
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                Statement enreg=conx.createStatement();
+                Boolean L2=enreg.execute("insert into fournisseurs(codefiss,Nom,Prenom,Postnom,Adresse,Tel,Mail)values"+"('"+fournisseur+"','"+nom+"','"+prenom+"','"+post+"','"+Ad+"','"+telephone+"','"+mail+"')");
+                if(!L2){
+                    JOptionPane.showMessageDialog(this,"Enregistrement réussi");
+                    cdfiss.setText("");
+                    txtnom.setText("");
+                    txtprn.setText("");
+                    txtpost.setText("");
+                    txtAd.setText("");
+                    txttel.setText("");
+                    txtmail.setText("");
+                    DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
+                    tbl.addRow(new Object[]{fournisseur,nom,prenom,post,Ad,telephone,mail});
+                }
+            } catch (Exception e) {
+            }
+        }
+    }//GEN-LAST:event_valbtnKeyPressed
 
     /**
      * @param args the command line arguments
@@ -665,7 +971,7 @@ public class Marchandises_admin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnret;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JTextField cdfiss;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
@@ -705,20 +1011,20 @@ public class Marchandises_admin extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTabbedPane jTabbedPane5;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
     private javax.swing.JTable jTable5;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
     private javax.swing.JTextField jTextField15;
-    private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField18;
     private javax.swing.JTextField jTextField19;
     private javax.swing.JTextField jTextField20;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JTable tb;
+    private javax.swing.JTextField txtAd;
+    private javax.swing.JTextField txtmail;
+    private javax.swing.JTextField txtnom;
+    private javax.swing.JTextField txtpost;
+    private javax.swing.JTextField txtprn;
+    private javax.swing.JTextField txttel;
+    private javax.swing.JButton valbtn;
     // End of variables declaration//GEN-END:variables
 }
