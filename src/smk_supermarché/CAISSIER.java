@@ -514,6 +514,21 @@ public class CAISSIER extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_quantiteKeyTyped
+    private void chargercdfiss(){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection Conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+            String sql="SELECT codefiss FROM fournisseurs";
+            PreparedStatement pst=Conx.prepareStatement(sql);
+            ResultSet rst=pst.executeQuery();
+            cdfiss.removeAllItems();
+            while(rst.next()){
+                cdfiss.addItem(rst.getString("codefiss"));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this,"Erreur"+e);
+        }
+    }
     private void chargercmb(){
         try {
             Class.forName("org.sqlite.JDBC");
@@ -531,7 +546,7 @@ public class CAISSIER extends javax.swing.JFrame {
     }
     private void btnvalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvalActionPerformed
         // TODO add your handling code here:
-        if(txtnom.getText().isEmpty()||txtpost.getText().isEmpty()||txtprn.getText().isEmpty()||combogenr.getSelectedIndex()==0||txttel.getText().isEmpty()||txtcdprod.getSelectedIndex()==0||quantite.getText().isEmpty()||cdfiss.getSelectedIndex()==0){
+        if(txtnom.getText().isEmpty()||txtpost.getText().isEmpty()||txtprn.getText().isEmpty()||txttel.getText().isEmpty()||quantite.getText().isEmpty()){
             JOptionPane.showMessageDialog(this, "Zones vides non autorisées");
             txtnom.requestFocus();
         }
@@ -541,7 +556,7 @@ public class CAISSIER extends javax.swing.JFrame {
                 String postnom=txtpost.getText();
                 String prenom=txtprn.getText();
                 String genre=combogenr.getSelectedItem().toString();
-                int tel=Integer.parseInt(txttel.getText());
+                String tel=txttel.getText();
                 String codeprod=txtcdprod.getSelectedItem().toString();
                 int quant=Integer.parseInt(quantite.getText());
                 String fournisseurs=cdfiss.getSelectedItem().toString();
@@ -551,7 +566,7 @@ public class CAISSIER extends javax.swing.JFrame {
                 Statement enreg=conx.createStatement();
                 if(quant>10){
                     fidelite+=1;
-                    Boolean L2=enreg.execute("INSERT INTO Client(Tel,Nom,Prenom,Postnom,Genre,fidelite,cdmarch,fiss)values"+"('"+tel+"','"+nom+"','"+prenom+"','"+postnom+"','"+genre+"','"+fidelite+"','"+codeprod+"','"+fournisseurs+"')");
+                    Boolean L2=enreg.execute("INSERT INTO Client(Tel,qtAchetee,Nom,Prenom,Postnom,Genre,fidelite,cdmarch,fiss)values"+"('"+tel+"','"+quant+"','"+nom+"','"+prenom+"','"+postnom+"','"+genre+"','"+fidelite+"','"+codeprod+"','"+fournisseurs+"')");
                     if(!L2){
                         JOptionPane.showMessageDialog(this,"Enregistré avec succès");
                         DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
@@ -559,11 +574,11 @@ public class CAISSIER extends javax.swing.JFrame {
                         txtnom.setText("");
                         txtpost.setText("");
                         txtprn.setText("");
-                        combogenr.setSelectedIndex(0);
+                        combogenr.setSelectedIndex(-1);
                         txttel.setText("");
-                        txtcdprod.setSelectedIndex(0);
+                        txtcdprod.setSelectedIndex(-1);
                         quantite.setText("");
-                        cdfiss.setSelectedIndex(0);
+                        cdfiss.setSelectedIndex(-1);
                     }
                 }
                 
@@ -576,6 +591,7 @@ public class CAISSIER extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         chargercmb();
+        chargercdfiss();
     }//GEN-LAST:event_formWindowOpened
 
     private void txtcdprodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcdprodActionPerformed

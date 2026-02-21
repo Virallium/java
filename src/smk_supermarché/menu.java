@@ -22,22 +22,32 @@ public class menu extends javax.swing.JFrame {
         if(role.equalsIgnoreCase("DG")){
             btnCA.setEnabled(false);
             btnRH.setEnabled(false);
-            btnL.setEnabled(false);
+            btngestock.setEnabled(false);
+            btnL1.setEnabled(false);
         }
         else if(role.equalsIgnoreCase("CAISSIER")){
             btnDG.setEnabled(false);
             btnRH.setEnabled(false);
-            btnL.setEnabled(false);
+            btngestock.setEnabled(false);
+            btnL1.setEnabled(false);
         }
         else if(role.equalsIgnoreCase("RH")){
             btnCA.setEnabled(false);
             btnDG.setEnabled(false);
-            btnL.setEnabled(false);
+            btngestock.setEnabled(false);
+            btnL1.setEnabled(false);
         }
         else if(role.equalsIgnoreCase("Logisticien")){
             btnCA.setEnabled(false);
             btnDG.setEnabled(false);
             btnRH.setEnabled(false);
+            btngestock.setEnabled(false);
+        }
+        else if(role.equalsIgnoreCase("Gestionnaire de stock")){
+            btnCA.setEnabled(false);
+            btnDG.setEnabled(false);
+            btnRH.setEnabled(false);
+            btnL1.setEnabled(false);
         }
     }
 
@@ -66,9 +76,10 @@ public class menu extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         btnRH = new javax.swing.JButton();
         btnCA = new javax.swing.JButton();
-        btnL = new javax.swing.JButton();
+        btngestock = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         retourbtn = new javax.swing.JButton();
+        btnL1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -135,13 +146,13 @@ public class menu extends javax.swing.JFrame {
             }
         });
 
-        btnL.setBackground(new java.awt.Color(102, 0, 204));
-        btnL.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnL.setForeground(new java.awt.Color(255, 255, 255));
-        btnL.setText("logisticien");
-        btnL.addActionListener(new java.awt.event.ActionListener() {
+        btngestock.setBackground(new java.awt.Color(102, 0, 204));
+        btngestock.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btngestock.setForeground(new java.awt.Color(255, 255, 255));
+        btngestock.setText("Gestionnaire Stock");
+        btngestock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLActionPerformed(evt);
+                btngestockActionPerformed(evt);
             }
         });
 
@@ -165,6 +176,16 @@ public class menu extends javax.swing.JFrame {
             }
         });
 
+        btnL1.setBackground(new java.awt.Color(102, 0, 204));
+        btnL1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnL1.setForeground(new java.awt.Color(255, 255, 255));
+        btnL1.setText("logisticien");
+        btnL1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnL1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -177,11 +198,9 @@ public class menu extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(130, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btngestock, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(btnL, javax.swing.GroupLayout.PREFERRED_SIZE, 648, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnDG, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -191,8 +210,13 @@ public class menu extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnRH, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(78, 78, 78))))
+                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(78, 78, 78))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGap(140, 140, 140)
+                    .addComponent(btnL1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(420, Short.MAX_VALUE)))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,14 +231,19 @@ public class menu extends javax.swing.JFrame {
                     .addComponent(btnDG, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRH, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCA, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnL, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(24, 24, 24)
+                .addComponent(btngestock, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(retourbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(53, 53, 53)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                    .addContainerGap(228, Short.MAX_VALUE)
+                    .addComponent(btnL1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(139, 139, 139)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -271,12 +300,16 @@ public class menu extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnDGActionPerformed
 
-    private void btnLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLActionPerformed
+    private void btngestockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btngestockActionPerformed
         // TODO add your handling code here:
-        logisticien Logisticien=new logisticien();
-        Logisticien.setVisible(true);
+        gestock Gestock=new gestock();
+        Gestock.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_btnLActionPerformed
+    }//GEN-LAST:event_btngestockActionPerformed
+
+    private void btnL1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnL1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnL1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -306,8 +339,9 @@ public class menu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCA;
     private javax.swing.JButton btnDG;
-    private javax.swing.JButton btnL;
+    private javax.swing.JButton btnL1;
     private javax.swing.JButton btnRH;
+    private javax.swing.JButton btngestock;
     private javax.swing.JLabel img;
     private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;

@@ -121,7 +121,7 @@ public class Authentification extends javax.swing.JFrame {
             }
         });
 
-        cmbPoste.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "choisir", "DG", "CAISSIER", "RH", "Logisticien" }));
+        cmbPoste.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "choisir", "DG", "CAISSIER", "RH", "Logisticien", "Gestionnaire de stock" }));
         cmbPoste.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 cmbPosteMouseClicked(evt);
