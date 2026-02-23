@@ -248,6 +248,7 @@ public class Authentification extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(102, 0, 204));
 
+        jTextField2.setEditable(false);
         jTextField2.setBackground(new java.awt.Color(102, 0, 204));
         jTextField2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jTextField2.setForeground(new java.awt.Color(255, 255, 255));

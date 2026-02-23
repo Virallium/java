@@ -240,7 +240,7 @@
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="btnval" min="-2" pref="119" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="jButton3" min="-2" pref="119" max="-2" attributes="0"/>
+                                  <Component id="suppr" min="-2" pref="119" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -283,7 +283,7 @@
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="btnval" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
-                      <Component id="jButton3" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
+                      <Component id="suppr" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                       <Component id="jButton2" alignment="3" min="-2" pref="35" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
@@ -324,7 +324,7 @@
             <Property name="text" type="java.lang.String" value="MODIFIER"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton3">
+        <Component class="javax.swing.JButton" name="suppr">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="ff" type="rgb"/>
@@ -337,6 +337,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="SUPPR"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="supprActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnret">
           <Properties>

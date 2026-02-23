@@ -116,6 +116,8 @@ public class Marchandises_admin extends javax.swing.JFrame {
         jScrollPane6.setViewportView(tb2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -373,6 +375,7 @@ public class Marchandises_admin extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jTextField5.setEditable(false);
         jTextField5.setBackground(new java.awt.Color(102, 0, 204));
         jTextField5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jTextField5.setForeground(new java.awt.Color(255, 255, 255));
@@ -654,6 +657,34 @@ public class Marchandises_admin extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        int Row=tbfiss.getSelectedRow();
+        if(Row==-1){
+            JOptionPane.showMessageDialog(this, "Veuillez selectionner une ligne à supprimer");
+        }
+        else{
+            try {
+                Class.forName("org.sqlite.JDBC");
+                Connection Conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                String sql="delete from fournisseurs where codefiss=?";
+                PreparedStatement pst =Conx.prepareStatement(sql);
+                pst.setString(1,tbfiss.getValueAt(Row, 0).toString());
+                int resultat=pst.executeUpdate();
+                
+               
+                
+                if(resultat>1){
+                   JOptionPane.showMessageDialog(this,"Ligne vide");
+                    
+                }
+                else{
+                    JOptionPane.showMessageDialog(this,"Supprimé avec succès");
+                    DefaultTableModel tbident=(DefaultTableModel) tbfiss.getModel();
+                    tbident.removeRow(Row);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void txtnomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnomActionPerformed
@@ -842,28 +873,46 @@ public class Marchandises_admin extends javax.swing.JFrame {
         }
         else{
             try {
-                String fournisseur=cdfiss.getText();
-                String nom=txtnom.getText();
-                String prenom=txtprn.getText();
-                String post=txtpost.getText();
-                String Ad=txtAd.getText();
-                int telephone=Integer.parseInt(txttel.getText());
-                String mail=txtmail.getText();
+                String fournisseur=cdfiss.getText().toLowerCase();
+                String nom=txtnom.getText().toLowerCase();
+                String prenom=txtprn.getText().toLowerCase();
+                String post=txtpost.getText().toLowerCase();
+                String Ad=txtAd.getText().toLowerCase();
+                String telephone=txttel.getText();
+                String mail=txtmail.getText().toLowerCase();
                 Class.forName("org.sqlite.JDBC");
                 Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
-                Statement enreg=conx.createStatement();
-                Boolean L2=enreg.execute("insert into fournisseurs(codefiss,Nom,Prenom,Postnom,Adresse,Tel,Mail)values"+"('"+fournisseur+"','"+nom+"','"+prenom+"','"+post+"','"+Ad+"','"+telephone+"','"+mail+"')");
-                if(!L2){
-                    JOptionPane.showMessageDialog(this,"Enregistrement réussi");
-                    cdfiss.setText("");
-                    txtnom.setText("");
-                    txtprn.setText("");
-                    txtpost.setText("");
-                    txtAd.setText("");
-                    txttel.setText("");
-                    txtmail.setText("");
-                    DefaultTableModel tbl=(DefaultTableModel)tbfiss.getModel();
-                    tbl.addRow(new Object[]{fournisseur,nom,prenom,post,Ad,telephone,mail});
+                String sql="SELECT * FROM fournisseurs WHERE Nom LIKE ? AND Tel LIKE ?";
+                PreparedStatement pst=conx.prepareStatement(sql);
+                pst.setString(1, nom);
+                pst.setString(2, telephone);
+                ResultSet rst=pst.executeQuery();
+                if(rst.next()){
+                    JOptionPane.showMessageDialog(this, "Ces information se trouvent déjà dans la base de données veuillez modifier");
+                }
+                else{
+                    try {
+                        String sqlenreg="INSERT INTO fournisseurs(codefiss,Nom,Prenom,Postnom,Adresse,Tel,Mail) VALUES "+"('"+fournisseur+"','"+nom+"','"+prenom+"','"+post+"','"+Ad+"','"+telephone+"','"+mail+"')";
+                        PreparedStatement pstenreg=conx.prepareStatement(sqlenreg);
+                        int ligne=pstenreg.executeUpdate();
+                        if(ligne>0){
+                            JOptionPane.showMessageDialog(this, "Enregistrement réussi");
+                            DefaultTableModel tbl=(DefaultTableModel)tbfiss.getModel();
+                            tbl.addRow(new Object[]{fournisseur,nom,prenom,post,Ad,telephone,mail});
+                            cdfiss.setText("");
+                            txtnom.setText("");
+                            txtprn.setText("");
+                            txtpost.setText("");
+                            txtAd.setText("");
+                            txttel.setText("");
+                            txtmail.setText("");
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(this, "Enregistrement échoué");
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Erreur"+e.getMessage());
+                    }
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Erreur"+e);
@@ -879,32 +928,51 @@ public class Marchandises_admin extends javax.swing.JFrame {
         }
         else{
             try {
-                String fournisseur=cdfiss.getText();
-                String nom=txtnom.getText();
-                String prenom=txtprn.getText();
-                String post=txtpost.getText();
-                String Ad=txtAd.getText();
-                int telephone=Integer.parseInt(txttel.getText());
-                String mail=txtmail.getText();
+                String fournisseur=cdfiss.getText().toLowerCase();
+                String nom=txtnom.getText().toLowerCase();
+                String prenom=txtprn.getText().toLowerCase();
+                String post=txtpost.getText().toLowerCase();
+                String Ad=txtAd.getText().toLowerCase();
+                String telephone=txttel.getText();
+                String mail=txtmail.getText().toLowerCase();
                 Class.forName("org.sqlite.JDBC");
                 Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
-                Statement enreg=conx.createStatement();
-                Boolean L2=enreg.execute("insert into fournisseurs(codefiss,Nom,Prenom,Postnom,Adresse,Tel,Mail)values"+"('"+fournisseur+"','"+nom+"','"+prenom+"','"+post+"','"+Ad+"','"+telephone+"','"+mail+"')");
-                if(!L2){
-                    JOptionPane.showMessageDialog(this,"Enregistrement réussi");
-                    cdfiss.setText("");
-                    txtnom.setText("");
-                    txtprn.setText("");
-                    txtpost.setText("");
-                    txtAd.setText("");
-                    txttel.setText("");
-                    txtmail.setText("");
-                    DefaultTableModel tbl=(DefaultTableModel)tbfiss.getModel();
-                    tbl.addRow(new Object[]{fournisseur,nom,prenom,post,Ad,telephone,mail});
+                String sql="SELECT * FROM fournisseurs WHERE Nom LIKE ? AND Tel LIKE ?";
+                PreparedStatement pst=conx.prepareStatement(sql);
+                pst.setString(1, nom);
+                pst.setString(2, telephone);
+                ResultSet rst=pst.executeQuery();
+                if(rst.next()){
+                    JOptionPane.showMessageDialog(this, "Ces information se trouvent déjà dans la base de données veuillez modifier");
+                }
+                else{
+                    try {
+                        String sqlenreg="INSERT INTO fournisseurs(codefiss,Nom,Prenom,Postnom,Adresse,Tel,Mail) VALUES "+"('"+fournisseur+"','"+nom+"','"+prenom+"','"+post+"','"+Ad+"','"+telephone+"','"+mail+"')";
+                        PreparedStatement pstenreg=conx.prepareStatement(sqlenreg);
+                        int ligne=pstenreg.executeUpdate();
+                        if(ligne>0){
+                            JOptionPane.showMessageDialog(this, "Enregistrement réussi");
+                            DefaultTableModel tbl=(DefaultTableModel)tbfiss.getModel();
+                            tbl.addRow(new Object[]{fournisseur,nom,prenom,post,Ad,telephone,mail});
+                            cdfiss.setText("");
+                            txtnom.setText("");
+                            txtprn.setText("");
+                            txtpost.setText("");
+                            txtAd.setText("");
+                            txttel.setText("");
+                            txtmail.setText("");
+                        }
+                        else{
+                            JOptionPane.showMessageDialog(this, "Enregistrement échoué");
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Erreur"+e.getMessage());
+                    }
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Erreur"+e);
             }
+            
         }
     }//GEN-LAST:event_valbtnKeyPressed
     private void chargertableContents(){
@@ -968,7 +1036,7 @@ public class Marchandises_admin extends javax.swing.JFrame {
                 pst.setString(1, idstock.getText());
                 ResultSet rst=pst.executeQuery();
                 DefaultTableModel tb=(DefaultTableModel)tbstock.getModel();
-                int i=0;
+                int i;
                 boolean existedeja=false;
                 for(i=0;i<tb.getRowCount(); i++){
                     if(tb.getValueAt(i,0).equals(rst.getString("idstock"))){

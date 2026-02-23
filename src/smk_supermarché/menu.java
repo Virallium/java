@@ -4,6 +4,7 @@
  */
 package smk_supermarché;
 
+import java.awt.Menu;
 import javax.swing.JComboBox;
 
 /**
@@ -309,6 +310,9 @@ public class menu extends javax.swing.JFrame {
 
     private void btnL1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnL1ActionPerformed
         // TODO add your handling code here:
+       logisticien log=new logisticien();
+       log.setVisible(true);
+       this.dispose();
     }//GEN-LAST:event_btnL1ActionPerformed
 
     /**

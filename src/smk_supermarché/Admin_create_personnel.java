@@ -275,7 +275,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
             }
         });
 
-        role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "choisir", "CAISSIER", "Logisticien" }));
+        role.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "choisir", "CAISSIER", "Logisticien", "Gestionnaire de stock" }));
         role.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roleActionPerformed(evt);
@@ -445,13 +445,14 @@ public class Admin_create_personnel extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Matricul", "Nom", "Post-Nom", "Prenom", "Date embauche", "Date de naissance", "Rôle", "Mot de passe"
+                "Matricul", "Nom", "Post-Nom", "Prenom", "Date embauche", "Date de naissance", "Rôle", "Mot de passe", "Mention"
             }
         ));
         jScrollPane1.setViewportView(tbpersonnel);
 
         jPanel6.setBackground(new java.awt.Color(102, 0, 204));
 
+        jTextField5.setEditable(false);
         jTextField5.setBackground(new java.awt.Color(102, 0, 204));
         jTextField5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jTextField5.setForeground(new java.awt.Color(255, 255, 255));
@@ -671,19 +672,36 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                 String mention=txtmention.getText();
                 Class.forName("org.sqlite.JDBC");
                 Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
-                Statement enreg=conx.createStatement();
-                Boolean L2=enreg.execute("insert into personnels(Matr,Nom,Postnom,Prenom,DateEmbauche,Datenais,Rôle,Mpass,Mention) values"+"('"+numatr+"','"+nom_personnel+"','"+postnom+"','"+prenom+"','"+date_embauche+"','"+datenais+"','"+role_utilisateur+"','"+mpass_personnel+"','"+mention+"')");
-                if (!L2){
-                    JOptionPane.showMessageDialog(this, "Ligne Ajoutée Avec succès");
-                    DefaultTableModel tblpersonnel=(DefaultTableModel)tbpersonnel.getModel();
-                    tblpersonnel.addRow(new Object[]{numatr,nom_personnel,postnom,date_embauche,datenais,role_utilisateur,mpass_personnel});
+                String sqlread="SELECT * FROM personnels WHERE Matr= ?";
+                PreparedStatement read=conx.prepareStatement(sqlread);
+                read.setString(1, numatr);
+                ResultSet readrst=read.executeQuery();
+                String sqlenreg="insert into personnels(Matr,Nom,Postnom,Prenom,DateEmbauche,Datenais,Rôle,Mpass,Mention) values(?,?,?,?,?,?,?,?,?)";
+                if(readrst.next()){
+                    JOptionPane.showMessageDialog(this,"Le personnel se trouve déjà dans la base des données");
+                }
+                else{
+                    PreparedStatement enregpst=conx.prepareStatement(sqlenreg);
+                    enregpst.setString(1, numatr);
+                    enregpst.setString(2, nom_personnel);
+                    enregpst.setString(3, postnom);
+                    enregpst.setString(4, prenom);
+                    enregpst.setString(5, date_embauche);
+                    enregpst.setString(6, datenais);
+                    enregpst.setString(7, role_utilisateur);
+                    enregpst.setString(8, mpass_personnel);
+                    enregpst.setString(9, mention);
+                    enregpst.executeUpdate();
+                    JOptionPane.showMessageDialog(this, "Enregistrement fait avec succès");
+                    DefaultTableModel tb=(DefaultTableModel)tbpersonnel.getModel();
+                    tb.addRow(new Object[]{numatr,nom_personnel,postnom,prenom,date_embauche,datenais,role_utilisateur,mpass_personnel,mention});
                     numat.setText("");
                     txtnom.setText("");
                     txtpost.setText("");
                     txtprn.setText("");
                     Dtembauche.setDate(null);
                     Dtnaiss.setDate(null);
-                    role.setSelectedIndex(0);
+                    role.setSelectedIndex(-1);
                     mpass.setText("");
                     txtmention.setText("");
                 }
@@ -737,19 +755,36 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                 String mention=txtmention.getText();
                 Class.forName("org.sqlite.JDBC");
                 Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
-                Statement enreg=conx.createStatement();
-                Boolean L2=enreg.execute("insert into personnels(Matr,Nom,Postnom,Prenom,DateEmbauche,Datenais,Rôle,Mpass,Mention) values"+"('"+numatr+"','"+nom_personnel+"','"+postnom+"','"+prenom+"','"+date_embauche+"','"+datenais+"','"+role_utilisateur+"','"+mpass_personnel+"','"+mention+"')");
-                if (!L2){
-                    JOptionPane.showMessageDialog(this, "Ligne Ajoutée Avec succès");
-                    DefaultTableModel tblpersonnel=(DefaultTableModel)tbpersonnel.getModel();
-                    tblpersonnel.addRow(new Object[]{numatr,nom_personnel,postnom,date_embauche,datenais,role_utilisateur,mpass_personnel});
+                String sqlread="SELECT * FROM personnels WHERE Matr= ?";
+                PreparedStatement read=conx.prepareStatement(sqlread);
+                read.setString(1, numatr);
+                ResultSet readrst=read.executeQuery();
+                String sqlenreg="insert into personnels(Matr,Nom,Postnom,Prenom,DateEmbauche,Datenais,Rôle,Mpass,Mention) values(?,?,?,?,?,?,?,?,?)";
+                if(readrst.next()){
+                    JOptionPane.showMessageDialog(this,"Le personnel se trouve déjà dans la base des données");
+                }
+                else{
+                    PreparedStatement enregpst=conx.prepareStatement(sqlenreg);
+                    enregpst.setString(1, numatr);
+                    enregpst.setString(2, nom_personnel);
+                    enregpst.setString(3, postnom);
+                    enregpst.setString(4, prenom);
+                    enregpst.setString(5, date_embauche);
+                    enregpst.setString(6, datenais);
+                    enregpst.setString(7, role_utilisateur);
+                    enregpst.setString(8, mpass_personnel);
+                    enregpst.setString(9, mention);
+                    enregpst.executeUpdate();
+                    JOptionPane.showMessageDialog(this, "Enregistrement fait avec succès");
+                    DefaultTableModel tb=(DefaultTableModel)tbpersonnel.getModel();
+                    tb.addRow(new Object[]{numatr,nom_personnel,postnom,prenom,date_embauche,datenais,role_utilisateur,mpass_personnel,mention});
                     numat.setText("");
                     txtnom.setText("");
                     txtpost.setText("");
                     txtprn.setText("");
                     Dtembauche.setDate(null);
                     Dtnaiss.setDate(null);
-                    role.setSelectedIndex(0);
+                    role.setSelectedIndex(-1);
                     mpass.setText("");
                     txtmention.setText("");
                 }
@@ -766,14 +801,20 @@ public class Admin_create_personnel extends javax.swing.JFrame {
             String sql="SELECT * FROM personnels";
             PreparedStatement pst=conx.prepareStatement(sql);
             ResultSet rst=pst.executeQuery();
+            int i=0;
             while(rst.next()){
+                i++;
+                if(i<=2){
+                    continue;
+                }
                 DefaultTableModel tb=(DefaultTableModel)tbpersonnel.getModel();
-                tb.addRow(new Object[]{rst.getString("Matr"),rst.getString("Nom"),rst.getString("Postnom"),rst.getString("Prenom"),rst.getDate("DateEmbauche"),rst.getDate("Datenais"),rst.getString("Rôle"),rst.getString("Mpass"),rst.getString("Mention")});
+                tb.addRow(new Object[]{rst.getString("Matr"),rst.getString("Nom"),rst.getString("Postnom"),rst.getString("Prenom"),rst.getString("DateEmbauche"),rst.getString("Datenais"),rst.getString("Rôle"),rst.getString("Mpass"),rst.getString("Mention")});
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erreur"+e);
         }
     }
+    
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         chargerTableEmployes();

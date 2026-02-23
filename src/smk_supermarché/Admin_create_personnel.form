@@ -510,10 +510,11 @@
         <Component class="javax.swing.JComboBox" name="role">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="3">
+              <StringArray count="4">
                 <StringItem index="0" value="choisir"/>
                 <StringItem index="1" value="CAISSIER"/>
                 <StringItem index="2" value="Logisticien"/>
+                <StringItem index="3" value="Gestionnaire de stock"/>
               </StringArray>
             </Property>
           </Properties>
@@ -623,7 +624,7 @@
         <Component class="javax.swing.JTable" name="tbpersonnel">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="8" rowCount="0">
+              <Table columnCount="9" rowCount="0">
                 <Column editable="true" title="Matricul" type="java.lang.Object"/>
                 <Column editable="true" title="Nom" type="java.lang.Object"/>
                 <Column editable="true" title="Post-Nom" type="java.lang.Object"/>
@@ -632,6 +633,7 @@
                 <Column editable="true" title="Date de naissance" type="java.lang.Object"/>
                 <Column editable="true" title="R&#xf4;le" type="java.lang.Object"/>
                 <Column editable="true" title="Mot de passe" type="java.lang.Object"/>
+                <Column editable="true" title="Mention" type="java.lang.Object"/>
               </Table>
             </Property>
           </Properties>
@@ -660,6 +662,7 @@
       <SubComponents>
         <Component class="javax.swing.JTextField" name="jTextField5">
           <Properties>
+            <Property name="editable" type="boolean" value="false"/>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="0" red="66" type="rgb"/>
             </Property>

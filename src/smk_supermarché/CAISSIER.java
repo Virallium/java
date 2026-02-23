@@ -39,7 +39,7 @@ public class CAISSIER extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         btnval = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnsuppr = new javax.swing.JButton();
         btnret = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -81,6 +81,7 @@ public class CAISSIER extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(102, 0, 204));
 
+        jTextField5.setEditable(false);
         jTextField5.setBackground(new java.awt.Color(102, 0, 204));
         jTextField5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jTextField5.setForeground(new java.awt.Color(255, 255, 255));
@@ -126,10 +127,15 @@ public class CAISSIER extends javax.swing.JFrame {
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("MODIFIER");
 
-        jButton3.setBackground(new java.awt.Color(255, 0, 0));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("SUPPR");
+        btnsuppr.setBackground(new java.awt.Color(255, 0, 0));
+        btnsuppr.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnsuppr.setForeground(new java.awt.Color(255, 255, 255));
+        btnsuppr.setText("SUPPR");
+        btnsuppr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnsupprActionPerformed(evt);
+            }
+        });
 
         btnret.setBackground(new java.awt.Color(102, 0, 204));
         btnret.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -247,7 +253,7 @@ public class CAISSIER extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnval, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnsuppr, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 17, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -336,7 +342,7 @@ public class CAISSIER extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnval, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnsuppr, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
         );
@@ -552,9 +558,9 @@ public class CAISSIER extends javax.swing.JFrame {
         }
         else{
             try {
-                String nom=txtnom.getText();
-                String postnom=txtpost.getText();
-                String prenom=txtprn.getText();
+                String nom=txtnom.getText().toLowerCase();
+                String postnom=txtpost.getText().toLowerCase();
+                String prenom=txtprn.getText().toLowerCase();
                 String genre=combogenr.getSelectedItem().toString();
                 String tel=txttel.getText();
                 String codeprod=txtcdprod.getSelectedItem().toString();
@@ -562,15 +568,30 @@ public class CAISSIER extends javax.swing.JFrame {
                 String fournisseurs=cdfiss.getSelectedItem().toString();
                 Class.forName("org.sqlite.JDBC");
                 int fidelite=0;
+                if (quant > 49) fidelite = 5;
+                else if (quant > 39) fidelite = 4;
+                else if (quant > 29) fidelite = 3;
+                else if (quant > 19) fidelite = 2;
+                else if (quant > 9) fidelite = 1;
                 Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
-                Statement enreg=conx.createStatement();
-                if(quant>10){
-                    fidelite+=1;
-                    Boolean L2=enreg.execute("INSERT INTO Client(Tel,qtAchetee,Nom,Prenom,Postnom,Genre,fidelite,cdmarch,fiss)values"+"('"+tel+"','"+quant+"','"+nom+"','"+prenom+"','"+postnom+"','"+genre+"','"+fidelite+"','"+codeprod+"','"+fournisseurs+"')");
-                    if(!L2){
-                        JOptionPane.showMessageDialog(this,"Enregistré avec succès");
-                        DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
-                        tbl.addRow(new Object[]{codeprod,nom,postnom,prenom,genre,tel,quant,fournisseurs,fidelite});
+                String sqllecture="SELECT * FROM Client WHERE Tel = ?";
+                PreparedStatement pst=conx.prepareStatement(sqllecture);
+                pst.setString(1, tel);
+                ResultSet rst=pst.executeQuery();
+                if(rst.next()){
+                        int nfidelite=rst.getInt("fidelite")+fidelite;
+                        int nquant=rst.getInt("qtAchetee")+quant;
+                        String nfiss=fournisseurs;
+                        String updatefidelite="UPDATE Client SET fidelite = ?,qtAchetee = ?,cdmarch = ?,fiss = ? WHERE Tel = ? ";
+                        PreparedStatement pstUpd = conx.prepareStatement(updatefidelite);
+                        pstUpd.setInt(1, nfidelite);
+                        pstUpd.setInt(2,nquant);
+                        pstUpd.setString(3, codeprod);
+                        pstUpd.setString(4, nfiss);
+                        pstUpd.executeUpdate();
+                        DefaultTableModel tbl = (DefaultTableModel) tb.getModel();
+                        tbl.addRow(new Object[]{codeprod,nom,postnom,prenom,genre,tel,nquant,nfiss,nfidelite});
+                        JOptionPane.showMessageDialog(this, "Fidélité mise à jour");
                         txtnom.setText("");
                         txtpost.setText("");
                         txtprn.setText("");
@@ -578,20 +599,53 @@ public class CAISSIER extends javax.swing.JFrame {
                         txttel.setText("");
                         txtcdprod.setSelectedIndex(-1);
                         quantite.setText("");
-                        cdfiss.setSelectedIndex(-1);
-                    }
+                        cdfiss.setSelectedIndex(-1);  
+                }
+                else{
+                    String sqlEnreg="INSERT INTO Client(Tel, qtAchetee, Nom, Prenom, Postnom, Genre, fidelite, cdmarch, fiss) VALUES "+"('"+tel+"','"+quant+"','"+nom+"','"+prenom+"','"+postnom+"','"+genre+"','"+fidelite+"','"+codeprod+"','"+fournisseurs+"')";
+                    PreparedStatement pstenreg=conx.prepareStatement(sqlEnreg);
+                    pstenreg.executeUpdate();
+                    DefaultTableModel tbl = (DefaultTableModel) tb.getModel();
+                    tbl.addRow(new Object[]{codeprod,nom,postnom,prenom,genre,tel,quant,fournisseurs,fidelite});
+                    JOptionPane.showMessageDialog(this, "Enregistré avec succès");
+                    txtnom.setText("");
+                    txtpost.setText("");
+                    txtprn.setText("");
+                    combogenr.setSelectedIndex(-1);
+                    txttel.setText("");
+                    txtcdprod.setSelectedIndex(-1);
+                    quantite.setText("");
+                    cdfiss.setSelectedIndex(-1);
+                    
                 }
                 
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Erreur"+e);
+                JOptionPane.showMessageDialog(this, "Erreur"+e.getMessage());
             }
         }
     }//GEN-LAST:event_btnvalActionPerformed
-
+    private void chargerTableau(){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+            String sql="SELECT * FROM Client";
+            PreparedStatement pstchargerTb=conx.prepareStatement(sql);
+            ResultSet rst=pstchargerTb.executeQuery();
+            while(rst.next()){
+                tb.removeAll();
+                DefaultTableModel tab=(DefaultTableModel)tb.getModel();
+                tab.addRow(new Object[]{rst.getString("cdmarch"),rst.getString("Nom"),rst.getString("Postnom"),rst.getString("Prenom"),rst.getString("Genre"),rst.getString("Tel"),rst.getInt("qtAchetee"),rst.getString("fiss"),rst.getInt("fidelite")});
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erreur"+e.getMessage());
+        }
+        
+    }
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         chargercmb();
         chargercdfiss();
+        chargerTableau();
     }//GEN-LAST:event_formWindowOpened
 
     private void txtcdprodActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcdprodActionPerformed
@@ -643,6 +697,38 @@ public class CAISSIER extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnvalKeyPressed
 
+    private void btnsupprActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsupprActionPerformed
+        // TODO add your handling code here:
+        int Row=tb.getSelectedRow();
+        if(Row==-1){
+            JOptionPane.showMessageDialog(this, "Veuillez selectionner une ligne à supprimer");
+        }
+        else{
+            try {
+                Class.forName("org.sqlite.JDBC");
+                Connection Conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                String sql="delete from Client where Tel=?";
+                PreparedStatement pst =Conx.prepareStatement(sql);
+                pst.setString(1,tb.getValueAt(Row, 0).toString());
+                int resultat=pst.executeUpdate();
+                
+               
+                
+                if(resultat>1){
+                   JOptionPane.showMessageDialog(this,"Ligne vide");
+                    
+                }
+                else{
+                    JOptionPane.showMessageDialog(this,"Supprimé avec succès");
+                    DefaultTableModel tbident=(DefaultTableModel) tb.getModel();
+                    tbident.removeRow(Row);
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
+        }
+    }//GEN-LAST:event_btnsupprActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -670,11 +756,11 @@ public class CAISSIER extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnret;
+    private javax.swing.JButton btnsuppr;
     private javax.swing.JButton btnval;
     private javax.swing.JComboBox<String> cdfiss;
     private javax.swing.JComboBox<String> combogenr;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

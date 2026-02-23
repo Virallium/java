@@ -38,7 +38,7 @@ public class logisticien extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         valbtn = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        suppr = new javax.swing.JButton();
         btnret = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -55,7 +55,7 @@ public class logisticien extends javax.swing.JFrame {
         txtPA = new javax.swing.JTextField();
         txtQt = new javax.swing.JTextField();
         cmbcatg = new javax.swing.JComboBox<>();
-        txtCdfiss = new javax.swing.JComboBox<>();
+        cmbCdfiss = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jTextField5 = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
@@ -102,10 +102,15 @@ public class logisticien extends javax.swing.JFrame {
         jButton2.setForeground(new java.awt.Color(255, 255, 255));
         jButton2.setText("MODIFIER");
 
-        jButton3.setBackground(new java.awt.Color(255, 0, 0));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jButton3.setText("SUPPR");
+        suppr.setBackground(new java.awt.Color(255, 0, 0));
+        suppr.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        suppr.setForeground(new java.awt.Color(255, 255, 255));
+        suppr.setText("SUPPR");
+        suppr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                supprActionPerformed(evt);
+            }
+        });
 
         btnret.setBackground(new java.awt.Color(102, 0, 204));
         btnret.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -225,10 +230,10 @@ public class logisticien extends javax.swing.JFrame {
             }
         });
 
-        txtCdfiss.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Choisir", "Item 2", "Item 3", "Item 4" }));
-        txtCdfiss.addActionListener(new java.awt.event.ActionListener() {
+        cmbCdfiss.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Choisir", "Item 2", "Item 3", "Item 4" }));
+        cmbCdfiss.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCdfissActionPerformed(evt);
+                cmbCdfissActionPerformed(evt);
             }
         });
 
@@ -244,7 +249,7 @@ public class logisticien extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(valbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(suppr, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 17, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -272,7 +277,7 @@ public class logisticien extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(txtQt)
-                                            .addComponent(txtCdfiss, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                            .addComponent(cmbCdfiss, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -329,11 +334,11 @@ public class logisticien extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13)
-                    .addComponent(txtCdfiss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cmbCdfiss, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(valbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(suppr, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
         );
@@ -555,7 +560,7 @@ public class logisticien extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Zones vide non autorisées");
             }
             else{
-                txtCdfiss.requestFocus();
+                cmbCdfiss.requestFocus();
             }
         }
     }//GEN-LAST:event_txtQtKeyPressed
@@ -577,90 +582,130 @@ public class logisticien extends javax.swing.JFrame {
 
     private void valbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_valbtnActionPerformed
         // TODO add your handling code here:
-        if(txtcd.getText().isEmpty()||txtnomarch.getText().isEmpty()||txtnumfac.getText().isEmpty()||cmbcatg.getSelectedIndex()==0||txtPU.getText().isEmpty()||txtPA.getText().isEmpty()||txtQt.getText().isEmpty()||txtCdfiss.getSelectedIndex()==0){
+        if(txtcd.getText().isEmpty()||txtnomarch.getText().isEmpty()||txtnumfac.getText().isEmpty()||txtPU.getText().isEmpty()||txtPA.getText().isEmpty()||txtQt.getText().isEmpty()){
             JOptionPane.showMessageDialog(this,"Vides non autorisées");
         }
         else{
             try {
-                String CodeMarchandise=txtcd.getText();
-                String nom=txtnomarch.getText();
-                int fac=Integer.parseInt(txtnumfac.getText());
+                String code=txtcd.getText();
+                String nom_march=txtnomarch.getText();
+                String facture=txtnumfac.getText();
                 String catg=cmbcatg.getSelectedItem().toString();
-                double PU=Double.parseDouble(txtPU.getText());
-                double PA=Double.parseDouble(txtPA.getText());
-                double qt=Double.parseDouble(txtQt.getText());
-                String cdfiss=txtCdfiss.getSelectedItem().toString();
-                Double tot=PU*qt;
+                String fiss=cmbCdfiss.getSelectedItem().toString();
+                int pu=Integer.parseInt(txtPU.getText());
+                int pa=Integer.parseInt(txtPA.getText());
+                int qt=Integer.parseInt(txtQt.getText());
+                int qtotal=pu*qt;
                 Class.forName("org.sqlite.JDBC");
                 Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
-                Statement enreg=conx.createStatement();
-                Boolean L2=enreg.execute("insert into Marchandises(CodeMarch,Nomarch,Numfac,Type,PA,Qt,Cdfiss,PU,PrixTot)values"+"('"+CodeMarchandise+"','"+nom+"','"+fac+"','"+catg+"','"+PU+"','"+PA+"','"+qt+"','"+cdfiss+"','"+tot+"')");
-                if(!L2){
-                    JOptionPane.showMessageDialog(this, "Enregistré avec succèes");
-                    DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
-                    tbl.addRow(new Object[]{CodeMarchandise,nom,fac,catg,PU,PA,qt,cdfiss,tot});
-                    txtcd.setText("");
-                    txtnomarch.setText("");
-                    txtnumfac.setText("");
-                    cmbcatg.setSelectedIndex(0);
-                    txtPU.setText("");
-                    txtPA.setText("");
-                    txtQt.setText("");
-                    txtCdfiss.setSelectedIndex(0);
+                String sqlread="SELECT * FROM Marchandises WHERE CodeMarch= ?";
+                PreparedStatement read=conx.prepareStatement(sqlread);
+                read.setString(1, code);
+                ResultSet readrst=read.executeQuery();
+                if(readrst.next()){
+                    JOptionPane.showMessageDialog(this,"La marchandise se trouve déjà dans la base des données");
                 }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this,"Erreur"+e);
+                else{
+                    try {
+                        String sqlenreg="insert into Marchandises(CodeMarch,Nomarch,Numfac,Type,PA,Qt,Cdfiss,Pu,PrixTot) values(?,?,?,?,?,?,?,?,?)";
+                        PreparedStatement enregpst=conx.prepareStatement(sqlenreg);
+                        enregpst.setString(1, code);
+                        enregpst.setString(2, nom_march);
+                        enregpst.setString(3, facture);
+                        enregpst.setString(4, catg);
+                        enregpst.setInt(5, pa);
+                        enregpst.setInt(6, qt);
+                        enregpst.setString(7, fiss);
+                        enregpst.setInt(8, pu);
+                        enregpst.setInt(9, qtotal);
+                        enregpst.executeUpdate();
+                        JOptionPane.showMessageDialog(this, "Enregistrement fait avec succès");
+                        DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
+                        tbl.addRow(new Object[]{code,nom_march,facture,catg,pu,pa,qt,fiss,qtotal});
+                        txtcd.setText("");
+                        txtnomarch.setText("");
+                        txtnumfac.setText("");
+                        cmbcatg.setSelectedIndex(-1);
+                        txtPU.setText("");
+                        txtPA.setText("");
+                        txtQt.setText("");
+                        cmbCdfiss.setSelectedIndex(0);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, "Erreur"+e.getMessage());
+                        e.printStackTrace();
+                    }
+                    conx.close();
+                }
             }
-            
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
         }
     }//GEN-LAST:event_valbtnActionPerformed
 
     private void valbtnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_valbtnKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyCode()==10){
-            if(txtcd.getText().isEmpty()||txtnomarch.getText().isEmpty()||txtnumfac.getText().isEmpty()||cmbcatg.getSelectedIndex()==0||txtPU.getText().isEmpty()||txtPA.getText().isEmpty()||txtQt.getText().isEmpty()||txtCdfiss.getSelectedIndex()==0){
+            if(txtcd.getText().isEmpty()||txtnomarch.getText().isEmpty()||txtnumfac.getText().isEmpty()||txtPU.getText().isEmpty()||txtPA.getText().isEmpty()||txtQt.getText().isEmpty()){
             JOptionPane.showMessageDialog(this,"Vides non autorisées");
-            }
-            else{
-                try {
-                    String CodeMarchandise=txtcd.getText();
-                    String nom=txtnomarch.getText();
-                    int fac=Integer.parseInt(txtnumfac.getText());
-                    String catg=cmbcatg.getSelectedItem().toString();
-                    double PU=Double.parseDouble(txtPU.getText());
-                    double PA=Double.parseDouble(txtPA.getText());
-                    double qt=Double.parseDouble(txtQt.getText());
-                    String cdfiss=txtCdfiss.getSelectedItem().toString();
-                    Double tot=PU*qt;
-                    Class.forName("org.sqlite.JDBC");
-                    Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
-                    Statement enreg=conx.createStatement();
-                    Boolean L2=enreg.execute("insert into Marchandises(CodeMarch,Nomarch,Numfac,Type,PA,Qt,Cdfiss,PU,PrixTot)values"+"('"+CodeMarchandise+"','"+nom+"','"+fac+"','"+catg+"','"+PU+"','"+PA+"','"+qt+"','"+cdfiss+"','"+tot+"')");
-                    if(!L2){
-                        JOptionPane.showMessageDialog(this, "Enregistré avec succèes");
-                        DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
-                        tbl.addRow(new Object[]{CodeMarchandise,nom,fac,catg,PU,PA,qt,cdfiss,tot});
-                        txtcd.setText("");
-                        txtnomarch.setText("");
-                        txtnumfac.setText("");
-                        cmbcatg.setSelectedIndex(0);
-                        txtPU.setText("");
-                        txtPA.setText("");
-                        txtQt.setText("");
-                        txtCdfiss.setSelectedIndex(0);
-                    }
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this,"Erreur"+e);
+        }
+        else{
+            String code=txtcd.getText();
+            String nom_march=txtnomarch.getText();
+            String facture=txtnumfac.getText();
+            String catg=cmbcatg.getSelectedItem().toString();
+            String fiss=cmbCdfiss.getSelectedItem().toString();
+            int pu=Integer.parseInt(txtPU.getText());
+            int pa=Integer.parseInt(txtPA.getText());
+            int qt=Integer.parseInt(txtQt.getText());
+            int qtotal=pu*qt;
+            try {
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                String sqlread="SELECT * FROM Marchandises WHERE CodeMarch= ?";
+                PreparedStatement read=conx.prepareStatement(sqlread);
+                read.setString(1, code);
+                ResultSet readrst=read.executeQuery();
+                String sqlenreg="insert into Marchandises(CodeMarch,Nomarch,Numfac,Type,PA,Qt,Cdfiss,Pu,PrixTot) values(?,?,?,?,?,?,?,?,?)";
+                if(readrst.next()){
+                    JOptionPane.showMessageDialog(this,"La marchandise se trouve déjà dans la base des données");
                 }
-
+                else{
+                    PreparedStatement enregpst=conx.prepareStatement(sqlenreg);
+                    enregpst.setString(1, code);
+                    enregpst.setString(2, nom_march);
+                    enregpst.setString(3, facture);
+                    enregpst.setString(4, catg);
+                    enregpst.setInt(5, pa);
+                    enregpst.setInt(6, qt);
+                    enregpst.setString(7, fiss);
+                    enregpst.setInt(8, pu);
+                    enregpst.setInt(9, qtotal);
+                    enregpst.executeUpdate();
+                    JOptionPane.showMessageDialog(this, "Enregistrement fait avec succès");
+                    DefaultTableModel tbl=(DefaultTableModel)tb.getModel();
+                    tbl.addRow(new Object[]{code,nom_march,facture,catg,pu,pa,qt,fiss,qtotal});
+                    txtcd.setText("");
+                    txtnomarch.setText("");
+                    txtnumfac.setText("");
+                    cmbcatg.setSelectedIndex(-1);
+                    txtPU.setText("");
+                    txtPA.setText("");
+                    txtQt.setText("");
+                    cmbCdfiss.setSelectedIndex(0);
+                }
             }
+            catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
+        }
         }
     }//GEN-LAST:event_valbtnKeyPressed
 
-    private void txtCdfissActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCdfissActionPerformed
+    private void cmbCdfissActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbCdfissActionPerformed
         // TODO add your handling code here:
         valbtn.requestFocus();
-    }//GEN-LAST:event_txtCdfissActionPerformed
+    }//GEN-LAST:event_cmbCdfissActionPerformed
     private void Changercmbfiss(){
         try {
             Class.forName("org.sqlite.JDBC");
@@ -668,17 +713,66 @@ public class logisticien extends javax.swing.JFrame {
             String sql="SELECT Codefiss from fournisseurs";
             PreparedStatement pst=conx.prepareStatement(sql);
             ResultSet rst=pst.executeQuery();
-            if(rst.next()){
-                txtCdfiss.removeAllItems();
-                txtCdfiss.addItem(rst.getString("Codefiss"));
+            cmbCdfiss.removeAllItems();
+            while(rst.next()){
+                cmbCdfiss.addItem(rst.getString("Codefiss"));
             }
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erreur"+e);
         }
     }
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         Changercmbfiss();
+        chargertbfiss();
     }//GEN-LAST:event_formWindowOpened
+    private void chargertbfiss(){
+        try {
+            Class.forName("org.sqlite.JDBC");
+            Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+            String sqlreader="SELECT * FROM Marchandises";
+            PreparedStatement pst=conx.prepareStatement(sqlreader);
+            ResultSet rst=pst.executeQuery();
+            while(rst.next()){
+                DefaultTableModel tbident=(DefaultTableModel)tb.getModel();
+                tbident.addRow(new Object[]{rst.getString("CodeMarch"),rst.getString("Nomarch"),rst.getString("Numfac"),rst.getString("Type"),rst.getInt("PU"),rst.getInt("PA"),rst.getInt("Qt"),rst.getString("Cdfiss"),rst.getString("PrixTot")} );
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erreur"+e);
+        }
+        
+    }
+    private void supprActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supprActionPerformed
+        // TODO add your handling code here:
+        int Row=tb.getSelectedRow();
+        if(Row==-1){
+            JOptionPane.showMessageDialog(this, "Veuillez selectionner une ligne à supprimer");
+        }
+        else{
+            try {
+                Class.forName("org.sqlite.JDBC");
+                Connection Conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                String sql="delete from Marchandises where CodeMarch=?";
+                PreparedStatement pst =Conx.prepareStatement(sql);
+                pst.setString(1,tb.getValueAt(Row, 0).toString());
+                int resultat=pst.executeUpdate();
+                
+               
+                
+                if(resultat>1){
+                   JOptionPane.showMessageDialog(this,"Ligne vide");
+                }
+                else{
+                    JOptionPane.showMessageDialog(this,"Supprimé avec succès");
+                    DefaultTableModel tbident=(DefaultTableModel) tb.getModel();
+                    tbident.removeRow(Row);
+                }
+                Conx.close();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
+        }
+    }//GEN-LAST:event_supprActionPerformed
 
     /**
      * @param args the command line arguments
@@ -707,9 +801,9 @@ public class logisticien extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnret;
+    private javax.swing.JComboBox<String> cmbCdfiss;
     private javax.swing.JComboBox<String> cmbcatg;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -725,8 +819,8 @@ public class logisticien extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JButton suppr;
     private javax.swing.JTable tb;
-    private javax.swing.JComboBox<String> txtCdfiss;
     private javax.swing.JTextField txtPA;
     private javax.swing.JTextField txtPU;
     private javax.swing.JTextField txtQt;
