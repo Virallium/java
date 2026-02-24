@@ -58,7 +58,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
         Dtnaiss = new com.toedter.calendar.JDateChooser();
         role = new javax.swing.JComboBox<>();
         mpass = new javax.swing.JPasswordField();
-        jButton2 = new javax.swing.JButton();
+        btnmodifier = new javax.swing.JButton();
         Suppr = new javax.swing.JButton();
         BtnEnreg = new javax.swing.JButton();
         voir = new javax.swing.JButton();
@@ -293,10 +293,15 @@ public class Admin_create_personnel extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(102, 0, 204));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Modifier");
+        btnmodifier.setBackground(new java.awt.Color(102, 0, 204));
+        btnmodifier.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnmodifier.setForeground(new java.awt.Color(255, 255, 255));
+        btnmodifier.setText("Modifier");
+        btnmodifier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmodifierActionPerformed(evt);
+            }
+        });
 
         Suppr.setBackground(new java.awt.Color(255, 0, 0));
         Suppr.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -382,7 +387,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                     .addComponent(txtmention))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnmodifier, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Suppr, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(BtnEnreg, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE))
                 .addContainerGap())
@@ -434,7 +439,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                             .addComponent(voir))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(btnmodifier)
                     .addComponent(jLabel14)
                     .addComponent(txtmention, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
@@ -448,6 +453,11 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                 "Matricul", "Nom", "Post-Nom", "Prenom", "Date embauche", "Date de naissance", "Rôle", "Mot de passe", "Mention"
             }
         ));
+        tbpersonnel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbpersonnelMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbpersonnel);
 
         jPanel6.setBackground(new java.awt.Color(102, 0, 204));
@@ -838,7 +848,7 @@ public class Admin_create_personnel extends javax.swing.JFrame {
                 PreparedStatement pst=conx.prepareStatement(sql);
                 pst.setString(1,tbpersonnel.getValueAt(Row, 0).toString());
                 int rst=pst.executeUpdate();
-                if(rst>1){
+                if(rst==0){
                     JOptionPane.showMessageDialog(this, "Ligne vide");
                 }
                 else{
@@ -851,6 +861,76 @@ public class Admin_create_personnel extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_SupprActionPerformed
+
+    private void btnmodifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodifierActionPerformed
+        // TODO add your handling code here:
+        int row=tbpersonnel.getSelectedRow();
+        if(row==-1){
+            JOptionPane.showMessageDialog(this, "Veuillez selectionner la ligne à modifier svp");
+        }
+        else{
+            try {
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                String sql="UPDATE personnels SET Nom=?,Postnom=?,Prenom=?,DateEmbauche=?,Datenais=?,Rôle=?,Mpass=?,Mention=? WHERE Matr=?";
+                PreparedStatement pst=conx.prepareStatement(sql);
+                pst.setString(1, txtnom.getText());
+                pst.setString(2,txtpost.getText());
+                pst.setString(3, txtprn.getText());
+                pst.setString(4,String.valueOf(Dtembauche.getDate()));
+                pst.setString(5,String.valueOf(Dtnaiss.getDate()));
+                pst.setString(6, role.getSelectedItem().toString());
+                pst.setString(7, mpass.getText());
+                pst.setString(8, txtmention.getText());
+                pst.setString(9, numat.getText());
+                int resultat=pst.executeUpdate();
+                if(resultat>0){
+                  JOptionPane.showMessageDialog(this,"Modification effectuée avec succès");
+                  tbpersonnel.setValueAt(numat.getText(),row, 0);
+                  tbpersonnel.setValueAt(txtnom.getText(),  row, 1);
+                  tbpersonnel.setValueAt(txtpost.getText(),   row, 2);
+                  tbpersonnel.setValueAt(txtprn.getText(),   row, 3);
+                  tbpersonnel.setValueAt(Dtembauche.getDate(),   row, 4);
+                  tbpersonnel.setValueAt(Dtnaiss.getDate(),   row, 5);
+                  tbpersonnel.setValueAt(role.getSelectedItem().toString(),    row, 6);
+                  tbpersonnel.setValueAt(mpass.getText(), row, 7);
+                  tbpersonnel.setValueAt(txtmention.getText(), row, 8);
+                  numat.setText("");
+                  txtnom.setText("");
+                  txtpost.setText("");
+                  txtprn.setText("");
+                  Dtembauche.setDate(null);
+                  Dtnaiss.setDate(null);
+                  role.setSelectedIndex(-1);
+                  mpass.setText("");
+                  txtmention.setText("");
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Aucune modification faite");
+                }
+                conx.close();
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,"Erreur"+e);
+                e.getMessage();
+            }
+        }
+    }//GEN-LAST:event_btnmodifierActionPerformed
+
+    private void tbpersonnelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbpersonnelMouseClicked
+        // TODO add your handling code here:
+        int row=tbpersonnel.getSelectedRow();
+        if(row!=-1){
+            numat.setText(tbpersonnel.getValueAt(row, 0).toString());
+            txtnom.setText(tbpersonnel.getValueAt(row, 1).toString());
+            txtpost.setText(tbpersonnel.getValueAt(row, 2).toString());
+            txtprn.setText(tbpersonnel.getValueAt(row, 3).toString());
+            
+            role.setSelectedItem(tbpersonnel.getValueAt(row, 6).toString());
+            mpass.setText(tbpersonnel.getValueAt(row, 7).toString());   
+            txtmention.setText(tbpersonnel.getValueAt(row, 8).toString());
+        }
+    }//GEN-LAST:event_tbpersonnelMouseClicked
 
     /**
      * @param args the command line arguments
@@ -883,8 +963,8 @@ public class Admin_create_personnel extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser Dtembauche;
     private com.toedter.calendar.JDateChooser Dtnaiss;
     private javax.swing.JButton Suppr;
+    private javax.swing.JButton btnmodifier;
     private javax.swing.JLabel img;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

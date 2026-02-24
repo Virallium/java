@@ -62,7 +62,7 @@ public class Marchandises_admin extends javax.swing.JFrame {
         jLabel21 = new javax.swing.JLabel();
         valbtn = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        btnmodifier = new javax.swing.JButton();
         jTextField5 = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbfiss = new javax.swing.JTable();
@@ -283,7 +283,12 @@ public class Marchandises_admin extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setText("Modifier");
+        btnmodifier.setText("Modifier");
+        btnmodifier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmodifierActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -316,7 +321,7 @@ public class Marchandises_admin extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jButton6)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jButton7))))
+                                        .addComponent(btnmodifier))))
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -371,7 +376,7 @@ public class Marchandises_admin extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(valbtn)
                     .addComponent(jButton6)
-                    .addComponent(jButton7))
+                    .addComponent(btnmodifier))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -396,6 +401,11 @@ public class Marchandises_admin extends javax.swing.JFrame {
                 "Code Fournisseur", "Nom", "Prenom", "Post-Nom", "Adresse", "Tel", "Mail"
             }
         ));
+        tbfiss.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbfissMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tbfiss);
 
         btnret.setBackground(new java.awt.Color(102, 0, 204));
@@ -672,7 +682,7 @@ public class Marchandises_admin extends javax.swing.JFrame {
                 
                
                 
-                if(resultat>1){
+                if(resultat==0){
                    JOptionPane.showMessageDialog(this,"Ligne vide");
                     
                 }
@@ -914,6 +924,7 @@ public class Marchandises_admin extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, "Erreur"+e.getMessage());
                     }
                 }
+                conx.close();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Erreur"+e);
             }
@@ -1054,6 +1065,9 @@ public class Marchandises_admin extends javax.swing.JFrame {
                     }
                     
                 }
+                else{
+                    JOptionPane.showMessageDialog(this, "Cet élement n'est pas dans la base de données");
+                }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Erreur"+e.getMessage());
             }
@@ -1071,6 +1085,67 @@ public class Marchandises_admin extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_idstockKeyPressed
+
+    private void btnmodifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodifierActionPerformed
+        // TODO add your handling code here:
+        int row=tbfiss.getSelectedRow();
+        if(row==-1){
+            JOptionPane.showMessageDialog(this, "Veuillez selectionner une ligne afin de modifier");
+        }
+        else{
+            try {
+                String cd=cdfiss.getText();
+                String nom=txtnom.getText();
+                String prenom=txtprn.getText();
+                String postnom=txtpost.getText();
+                String Adresse=txtAd.getText();
+                String tel=txttel.getText();
+                String mail=txtmail.getText();
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                String sql="UPDATE fournisseurs SET Nom=?, Prenom=?, Postnom=?,Adresse=?,Tel=?,Mail=? WHERE codefiss=?";
+                PreparedStatement pst=conx.prepareStatement(sql);
+                pst.setString(1, nom);
+                pst.setString(2,prenom);
+                pst.setString(3,postnom);
+                pst.setString(4, Adresse);
+                pst.setString(5, tel);
+                pst.setString(6,mail);
+                pst.setString(7, cd);
+                int resultat=pst.executeUpdate();
+                if(resultat>0){
+                    JOptionPane.showMessageDialog(this,"Modification effectuée avec succès");
+                    tbfiss.setValueAt(cd, row, 0);
+                    tbfiss.setValueAt(nom, row, 1);
+                    tbfiss.setValueAt(prenom, row, 2);
+                    tbfiss.setValueAt(postnom, row, 3);
+                    tbfiss.setValueAt(Adresse, row, 4);
+                    tbfiss.setValueAt(tel, row, 5);
+                    tbfiss.setValueAt(mail, row, 6);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Aucune ligne trouvée");
+                }
+                conx.close();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
+        }
+    }//GEN-LAST:event_btnmodifierActionPerformed
+
+    private void tbfissMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbfissMouseClicked
+        // TODO add your handling code here:
+        int row=tbfiss.getSelectedRow();
+        if(row!=-1){
+            cdfiss.setText(tbfiss.getValueAt(row, 0).toString());
+            txtnom.setText(tbfiss.getValueAt(row, 1).toString());
+            txtprn.setText(tbfiss.getValueAt(row, 2).toString());
+            txtpost.setText(tbfiss.getValueAt(row, 3).toString());
+            txtAd.setText(tbfiss.getValueAt(row, 4).toString());
+            txttel.setText(tbfiss.getValueAt(row, 5).toString());
+            txtmail.setText(tbfiss.getValueAt(row, 6).toString());
+        }
+    }//GEN-LAST:event_tbfissMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1099,11 +1174,11 @@ public class Marchandises_admin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnchercher;
+    private javax.swing.JButton btnmodifier;
     private javax.swing.JButton btnret;
     private javax.swing.JTextField cdfiss;
     private javax.swing.JTextField idstock;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;

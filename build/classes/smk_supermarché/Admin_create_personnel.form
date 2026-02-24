@@ -320,7 +320,7 @@
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jButton2" max="32767" attributes="0"/>
+                      <Component id="btnmodifier" max="32767" attributes="0"/>
                       <Component id="Suppr" max="32767" attributes="0"/>
                       <Component id="BtnEnreg" pref="166" max="32767" attributes="0"/>
                   </Group>
@@ -388,7 +388,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnmodifier" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="txtmention" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -531,7 +531,7 @@
             <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="mpassKeyPressed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="btnmodifier">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="0" red="66" type="rgb"/>
@@ -544,6 +544,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Modifier"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnmodifierActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="Suppr">
           <Properties>
@@ -637,6 +640,9 @@
               </Table>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tbpersonnelMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

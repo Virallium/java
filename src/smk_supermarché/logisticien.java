@@ -37,7 +37,7 @@ public class logisticien extends javax.swing.JFrame {
         tb = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         valbtn = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnmodifier = new javax.swing.JButton();
         suppr = new javax.swing.JButton();
         btnret = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -78,6 +78,11 @@ public class logisticien extends javax.swing.JFrame {
                 "Code marchandise", "Nom marchandise", "Numero Facture", "Categorie", "Prix Unitaire", "Prix d'achat", "Quantité marchandise", "Code fournisseur", "Prix Total"
             }
         ));
+        tb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tb);
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
@@ -97,10 +102,15 @@ public class logisticien extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(102, 0, 204));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("MODIFIER");
+        btnmodifier.setBackground(new java.awt.Color(102, 0, 204));
+        btnmodifier.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnmodifier.setForeground(new java.awt.Color(255, 255, 255));
+        btnmodifier.setText("MODIFIER");
+        btnmodifier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmodifierActionPerformed(evt);
+            }
+        });
 
         suppr.setBackground(new java.awt.Color(255, 0, 0));
         suppr.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -245,7 +255,7 @@ public class logisticien extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(17, 17, 17)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnmodifier, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(valbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -339,7 +349,7 @@ public class logisticien extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(valbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(suppr, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnmodifier, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
         );
 
@@ -759,7 +769,7 @@ public class logisticien extends javax.swing.JFrame {
                 
                
                 
-                if(resultat>1){
+                if(resultat==0){
                    JOptionPane.showMessageDialog(this,"Ligne vide");
                 }
                 else{
@@ -773,6 +783,80 @@ public class logisticien extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_supprActionPerformed
+
+    private void btnmodifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodifierActionPerformed
+        // TODO add your handling code here:
+        int row=tb.getSelectedRow();
+        int PA=Integer.parseInt(txtPA.getText());
+        int PU=Integer.parseInt(txtPU.getText());
+        int Qt=Integer.parseInt(txtPA.getText());
+        int tot=PU*Qt;
+        if(row==-1){
+            JOptionPane.showMessageDialog(this, "Veuillez selectionner la ligne à modifier svp");
+        }
+        else{
+            try {
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                String sql="UPDATE Marchandises SET Nomarch=?,Numfac=?,Type=?,PA=?,Qt=?,Cdfiss=?,PU=?,PrixTot=? WHERE CodeMarch=?";
+                PreparedStatement pst=conx.prepareStatement(sql);
+                pst.setString(1, txtnomarch.getText());
+                pst.setString(2,txtnumfac.getText());
+                pst.setString(3, cmbcatg.getSelectedItem().toString());
+                pst.setInt(4, PA);
+                pst.setInt(5, Qt);
+                pst.setString(6,cmbCdfiss.getSelectedItem().toString());
+                pst.setInt(7,PU );
+                pst.setInt(9, tot);
+                pst.setString(9, txtcd.getText());
+                
+                int resultat=pst.executeUpdate();
+                if(resultat>0){
+                  JOptionPane.showMessageDialog(this,"Modification effectuée avec succès");
+                  tb.setValueAt(txtcd.getText(),row, 0);
+                  tb.setValueAt(txtnomarch.getText(),  row, 1);
+                  tb.setValueAt(txtnumfac.getText(),   row, 2);
+                  tb.setValueAt(cmbcatg.getSelectedItem().toString(),    row, 3);
+                  tb.setValueAt(txtPU.getText(), row, 4);
+                  tb.setValueAt(txtPA.getText(), row, 5);
+                  tb.setValueAt(txtQt.getText(),  row, 6);
+                  tb.setValueAt(cmbCdfiss.getSelectedItem().toString(),  row, 7);
+                  tb.setValueAt(tot,  row, 8);
+                  txtcd.setText("");
+                  txtnomarch.setText("");
+                  txtnumfac.setText("");
+                  cmbcatg.setSelectedIndex(-1);
+                  txtPU.setText("");
+                  txtPA.setText("");
+                  txtQt.setText("");
+                  cmbCdfiss.setSelectedIndex(-1);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Aucune modification faite");
+                }
+                conx.close();
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,"Erreur"+e);
+                e.getMessage();
+            }
+        }
+    }//GEN-LAST:event_btnmodifierActionPerformed
+
+    private void tbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbMouseClicked
+        // TODO add your handling code here:
+        int row=tb.getSelectedRow();
+        if(row!=-1){
+            txtcd.setText(tb.getValueAt(row, 0).toString());
+            txtnomarch.setText(tb.getValueAt(row, 1).toString());
+            txtnumfac.setText(tb.getValueAt(row, 2).toString());
+            cmbcatg.setSelectedItem(tb.getValueAt(row, 3).toString());
+            txtPU.setText(tb.getValueAt(row, 4).toString());
+            txtPA.setText(tb.getValueAt(row, 5).toString());
+            txtQt.setText(tb.getValueAt(row, 6).toString());
+            cmbCdfiss.setSelectedItem(tb.getValueAt(row, 7).toString());
+        }
+    }//GEN-LAST:event_tbMouseClicked
 
     /**
      * @param args the command line arguments
@@ -800,10 +884,10 @@ public class logisticien extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnmodifier;
     private javax.swing.JButton btnret;
     private javax.swing.JComboBox<String> cmbCdfiss;
     private javax.swing.JComboBox<String> cmbcatg;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

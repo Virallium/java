@@ -4,6 +4,7 @@
  */
 package smk_supermarché;
 
+import com.sun.source.doctree.ReturnTree;
 import javax.swing.JOptionPane;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
@@ -38,7 +39,7 @@ public class gestock extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         btnval = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnmodifier = new javax.swing.JButton();
         suppr = new javax.swing.JButton();
         btnret = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -48,8 +49,7 @@ public class gestock extends javax.swing.JFrame {
         txtidstock = new javax.swing.JTextField();
         securestock = new javax.swing.JTextField();
         quantite = new javax.swing.JTextField();
-        btnEnv = new javax.swing.JButton();
-        btnCommande = new javax.swing.JButton();
+        btnsorti = new javax.swing.JButton();
         cdprod = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,6 +69,11 @@ public class gestock extends javax.swing.JFrame {
                 "Id stock", "Stock de securité", "Code Marchandise", "Quantité stockée"
             }
         ));
+        tbl.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tbl);
 
         jPanel5.setBackground(new java.awt.Color(102, 0, 204));
@@ -142,10 +147,15 @@ public class gestock extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(102, 0, 204));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("MODIFIER");
+        btnmodifier.setBackground(new java.awt.Color(102, 0, 204));
+        btnmodifier.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnmodifier.setForeground(new java.awt.Color(255, 255, 255));
+        btnmodifier.setText("MODIFIER");
+        btnmodifier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmodifierActionPerformed(evt);
+            }
+        });
 
         suppr.setBackground(new java.awt.Color(255, 0, 0));
         suppr.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -215,33 +225,18 @@ public class gestock extends javax.swing.JFrame {
             }
         });
 
-        btnEnv.setBackground(new java.awt.Color(102, 0, 204));
-        btnEnv.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnEnv.setForeground(new java.awt.Color(255, 255, 255));
-        btnEnv.setText("SORTIR DU STOCK");
-        btnEnv.addActionListener(new java.awt.event.ActionListener() {
+        btnsorti.setBackground(new java.awt.Color(102, 0, 204));
+        btnsorti.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnsorti.setForeground(new java.awt.Color(255, 255, 255));
+        btnsorti.setText("SORTIR DU STOCK");
+        btnsorti.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEnvActionPerformed(evt);
+                btnsortiActionPerformed(evt);
             }
         });
-        btnEnv.addKeyListener(new java.awt.event.KeyAdapter() {
+        btnsorti.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnEnvKeyPressed(evt);
-            }
-        });
-
-        btnCommande.setBackground(new java.awt.Color(102, 0, 204));
-        btnCommande.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnCommande.setForeground(new java.awt.Color(255, 255, 255));
-        btnCommande.setText("PASSER COMMANDE");
-        btnCommande.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCommandeActionPerformed(evt);
-            }
-        });
-        btnCommande.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                btnCommandeKeyPressed(evt);
+                btnsortiKeyPressed(evt);
             }
         });
 
@@ -289,17 +284,14 @@ public class gestock extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnsorti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(btnEnv, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCommande, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnmodifier, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnval, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(suppr, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 17, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -323,15 +315,13 @@ public class gestock extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
                     .addComponent(quantite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEnv, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCommande, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addComponent(btnsorti, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnval, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(suppr, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnmodifier, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
         );
 
@@ -381,6 +371,7 @@ public class gestock extends javax.swing.JFrame {
         else{
             try {
                 String id=txtidstock.getText();
+                int qtstockee=Integer.parseInt(quantite.getText());
                 Class.forName("org.sqlite.JDBC");
                 Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
                 String sql="SELECT * FROM stock WHERE idStock= ?";
@@ -388,12 +379,24 @@ public class gestock extends javax.swing.JFrame {
                 pst.setString(1, id);
                 ResultSet rst=pst.executeQuery();
                 if(rst.next()){
-                    JOptionPane.showMessageDialog(this,"Cet id est déjà dans la base des données");
+                    int nouveau_stock=qtstockee+rst.getInt("qtstock");
+                    String sqlnouveaustock="update stock set qtstock=? ";
+                    PreparedStatement nouveaustock=conx.prepareStatement(sqlnouveaustock);
+                    nouveaustock.setInt(1,nouveau_stock );
+                    int resultat=nouveaustock.executeUpdate();
+                    if(resultat>1){
+                        JOptionPane.showMessageDialog(this, "Quantité stock mise à jour.");
+                        int row=tbl.getSelectedRow();
+                        DefaultTableModel tb=(DefaultTableModel)tbl.getModel();
+                        tb.setValueAt(id, row, 0);
+                        tb.setValueAt(securestock.getText(), row, 1);
+                        tb.setValueAt(cdprod.getSelectedItem().toString(), row, 2);
+                        tb.setValueAt(quantite.getText(), row, 3);
+                    }
                 }
                 else{
                     try {
                         int securitestock=Integer.parseInt(securestock.getText());
-                        int qtstockee=Integer.parseInt(quantite.getText());
                         String codmarche=cdprod.getSelectedItem().toString();
                         String sqlenreg="INSERT INTO stock(idStock,stock_securite,codemarch,qtstock)VALUES(?,?,?,?)";
                         PreparedStatement pstenreg=conx.prepareStatement(sqlenreg);
@@ -494,70 +497,84 @@ public class gestock extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_quantiteKeyTyped
 
-    private void btnEnvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnvActionPerformed
-        // TODO add your handling code here:
-        int id_stock=Integer.parseInt(JOptionPane.showInputDialog("Entrez l'id stock"));
-        String codmarch=JOptionPane.showInputDialog("Entrez le code marchandise");
-        int quantite_sortie=Integer.parseInt(JOptionPane.showInputDialog("Entrez la quantité à faire sortir"));
-        int stocksecurite=Integer.parseInt(securestock.getText());
-        
-            try {
-                Class.forName("org.sqlite.JDBC");
-                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
-                String sqlread="SELECT qtstock FROM stock";
-                PreparedStatement pst=conx.prepareStatement(sqlread);
-                ResultSet rst=pst.executeQuery();
-                if(rst.next()){
-                    int stock=rst.getInt("qtstock");
-                    if(quantite_sortie>stock){
-                        JOptionPane.showMessageDialog(this, "Sortie impossible car le stock est inférieur à la quantitée de sortie");
-                    }
-                    else{
-                        int nouvelle_quantite=rst.getInt("qtstock")-quantite_sortie;
-                        if(nouvelle_quantite<=stocksecurite){
-                            JOptionPane.showMessageDialog(this, "Veuillez passer une commande avant de continuer"+"\n"+"Le stock de sécurité a été atteint");
-                            btnCommande.requestFocus();
-                        }
-                        String sql="UPDATE stock set qtstock=?";
-                        PreparedStatement pstmod=conx.prepareStatement(sql);
-                        pst.setInt(1, id_stock);
-                        pst.setInt(2,stocksecurite);
-                        pst.setInt(3, Integer.parseInt(codmarch));
-                        pst.setInt(4, nouvelle_quantite);
-                        int lignemodifiee=pstmod.executeUpdate();
-                        if(lignemodifiee>0){
-                            DefaultTableModel tb=(DefaultTableModel)tbl.getModel();
-                            tb.setValueAt(NORMAL, id_stock, 1);
-                            tb.setValueAt(NORMAL, stocksecurite, 2);
-                            tb.setValueAt(NORMAL, Integer.parseInt(codmarch),3);
-                            tb.setValueAt(NORMAL, nouvelle_quantite, 4);
-                            JOptionPane.showMessageDialog(this, "Stock sortie avec suucès");
-                        }
-                    }
-                }
-                else{
-                    JOptionPane.showMessageDialog(this, "élement introuvable");
-                }
-                
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this,"Modifiee avec succès");
+    private void btnsortiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsortiActionPerformed
+        // TODO add your handling code here:                               
+        try {
+            int row = tbl.getSelectedRow();
+            if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Veuillez selectionner une ligne");
             }
-        
-        
-        
-    }//GEN-LAST:event_btnEnvActionPerformed
+            else{
+                String id_stock = JOptionPane.showInputDialog("Entrez l'id stock");
+                if (id_stock == null || id_stock.trim().isEmpty()) return;
 
-    private void btnEnvKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnEnvKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnEnvKeyPressed
+                String codmarch = JOptionPane.showInputDialog("Entrez le code marchandise");
+                if (codmarch == null || codmarch.trim().isEmpty()) return;
 
-    private void btnCommandeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCommandeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCommandeActionPerformed
+                String qteStr = JOptionPane.showInputDialog("Entrez la quantité à faire sortir"); 
+                if (qteStr == null || qteStr.trim().isEmpty()) return;
 
-    private void btnCommandeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnCommandeKeyPressed
+                int quantite_sortie;
+                try {
+                    quantite_sortie = Integer.parseInt(qteStr);
+                } catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(this, "Veuillez entrer une valeur numérique valide pour la quantité.");
+                    return;
+                }
+
+                Class.forName("org.sqlite.JDBC");
+                Connection conx = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+
+                String sqlread = "SELECT * FROM stock WHERE idStock = ? AND codeMarch = ?";
+                PreparedStatement pst = conx.prepareStatement(sqlread);
+                pst.setString(1, id_stock);
+                pst.setString(2, codmarch);
+                ResultSet rst = pst.executeQuery();
+
+                if (rst.next()) {
+                    int stocksecurite=rst.getInt("stock_securite");
+                    int stock = rst.getInt("qtstock");
+
+                    if (quantite_sortie > stock) {
+                        JOptionPane.showMessageDialog(this, "Sortie impossible : stock insuffisant.");
+                    } else {
+                        int nouvelle_quantite = stock - quantite_sortie;
+
+                        // Bloquer la sortie si elle fait descendre en dessous du stock de sécurité
+                        if (nouvelle_quantite < stocksecurite) {
+                            JOptionPane.showMessageDialog(this, "Sortie refusée : le stock de sécurité serait dépassé.\nVeuillez passer une commande.");
+                        } else {
+                            String sql = "UPDATE stock SET qtstock=? WHERE idStock=?";
+                            PreparedStatement pstmod = conx.prepareStatement(sql);
+                            pstmod.setInt(1, nouvelle_quantite);
+                            pstmod.setString(2, id_stock);
+
+                            int lignemodifiee = pstmod.executeUpdate();
+                            if (lignemodifiee > 0) {
+                                if (row != -1) {
+                                    DefaultTableModel tb = (DefaultTableModel) tbl.getModel();
+                                    tb.setValueAt(nouvelle_quantite, row, 3);
+                                }
+                                JOptionPane.showMessageDialog(this, "Stock sorti avec succès.");
+                            }
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Élément introuvable.");
+                }
+                conx.close();
+            }
+            
+        } 
+        catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Erreur : " + e.getMessage());
+        }
+
+    }//GEN-LAST:event_btnsortiActionPerformed
+
+    private void btnsortiKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnsortiKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnCommandeKeyPressed
+    }//GEN-LAST:event_btnsortiKeyPressed
 
     private void txtidstockKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtidstockKeyTyped
         // TODO add your handling code here:
@@ -617,7 +634,7 @@ public class gestock extends javax.swing.JFrame {
                 
                
                 
-                if(resultat>1){
+                if(resultat==0){
                    JOptionPane.showMessageDialog(this,"Ligne vide");
                     
                 }
@@ -632,6 +649,59 @@ public class gestock extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_supprActionPerformed
+
+    private void btnmodifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodifierActionPerformed
+        // TODO add your handling code here:
+        int row=tbl.getSelectedRow();
+        if(row==-1){
+            JOptionPane.showMessageDialog(this, "Veuillez selectionner une ligne afin de modifier");
+        }
+        else{
+            try {
+                String id_stock=txtidstock.getText();
+                int secure=Integer.parseInt(securestock.getText());
+                String codemarch=cdprod.getSelectedItem().toString();
+                int qtstock=Integer.parseInt(quantite.getText());
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                String sql="UPDATE stock SET stock_securite=?, codemarch=?, qtstock=? WHERE idStock=?";
+                PreparedStatement pst=conx.prepareStatement(sql);
+                pst.setInt(1, secure);
+                pst.setString(2,codemarch );
+                pst.setInt(3, qtstock);
+                pst.setString(4, id_stock);
+                int resultat=pst.executeUpdate();
+                if(resultat>0){
+                    JOptionPane.showMessageDialog(this,"Modification effectuée avec succès");
+                    tbl.setValueAt(txtidstock.getText(), row, 0);
+                    tbl.setValueAt(securestock.getText(), row, 1);
+                    tbl.setValueAt(cdprod.getSelectedItem().toString(), row, 2);
+                    tbl.setValueAt(qtstock, row, 3);
+                    txtidstock.setText("");
+                    securestock.setText("");
+                    cdprod.setSelectedIndex(-1);
+                    quantite.setText("");
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Aucune ligne trouvée");
+                }
+                conx.close();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
+        }
+    }//GEN-LAST:event_btnmodifierActionPerformed
+
+    private void tblMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblMouseClicked
+        // TODO add your handling code here:
+        int row=tbl.getSelectedRow();
+        if(row!=-1){
+            txtidstock.setText(tbl.getValueAt(row, 0).toString());
+            securestock.setText(tbl.getValueAt(row, 1).toString());
+            cdprod.setSelectedItem(tbl.getValueAt(row, 2).toString());
+            quantite.setText(tbl.getValueAt(row, 3).toString());
+        }
+    }//GEN-LAST:event_tblMouseClicked
     
     private void chargertablecontent(){
         try {
@@ -674,12 +744,11 @@ public class gestock extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCommande;
-    private javax.swing.JButton btnEnv;
+    private javax.swing.JButton btnmodifier;
     private javax.swing.JButton btnret;
+    private javax.swing.JButton btnsorti;
     private javax.swing.JButton btnval;
     private javax.swing.JComboBox<String> cdprod;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel6;

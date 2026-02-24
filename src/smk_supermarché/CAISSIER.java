@@ -38,7 +38,7 @@ public class CAISSIER extends javax.swing.JFrame {
         jTextField5 = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         btnval = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnmodifier = new javax.swing.JButton();
         btnsuppr = new javax.swing.JButton();
         btnret = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -77,6 +77,11 @@ public class CAISSIER extends javax.swing.JFrame {
                 "Code marchandise", "Nom ", "Postnom", "Prenom", "Genre", "Tel", "Quantite", "Code fournisseur", "Fidelite"
             }
         ));
+        tb.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tb);
 
         jPanel5.setBackground(new java.awt.Color(102, 0, 204));
@@ -122,10 +127,15 @@ public class CAISSIER extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(102, 0, 204));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("MODIFIER");
+        btnmodifier.setBackground(new java.awt.Color(102, 0, 204));
+        btnmodifier.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnmodifier.setForeground(new java.awt.Color(255, 255, 255));
+        btnmodifier.setText("MODIFIER");
+        btnmodifier.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmodifierActionPerformed(evt);
+            }
+        });
 
         btnsuppr.setBackground(new java.awt.Color(255, 0, 0));
         btnsuppr.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -249,7 +259,7 @@ public class CAISSIER extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(17, 17, 17)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnmodifier, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnval, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -343,7 +353,7 @@ public class CAISSIER extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnval, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnsuppr, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnmodifier, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
         );
 
@@ -714,7 +724,7 @@ public class CAISSIER extends javax.swing.JFrame {
                 
                
                 
-                if(resultat>1){
+                if(resultat==0){
                    JOptionPane.showMessageDialog(this,"Ligne vide");
                     
                 }
@@ -728,6 +738,71 @@ public class CAISSIER extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnsupprActionPerformed
+
+    private void btnmodifierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodifierActionPerformed
+        // TODO add your handling code here:
+        int row=tb.getSelectedRow();
+        if(row==-1){
+            JOptionPane.showMessageDialog(this, "Veuillez selectionner une ligne afin de modifier");
+        }
+        else{
+            try {
+                String nom=txtnom.getText();
+                String postnom=txtpost.getText();
+                String prenom=txtprn.getText();
+                String genre=combogenr.getSelectedItem().toString();
+                String tel=txttel.getText();
+                String codeprod=txtcdprod.getSelectedItem().toString();
+                int qtstock=Integer.parseInt(quantite.getText());
+                String codefiss=cdfiss.getSelectedItem().toString();
+                Class.forName("org.sqlite.JDBC");
+                Connection conx=DriverManager.getConnection("jdbc:sqlite:C:\\Users\\mengi\\Documents\\SMK_SuperMarché\\SMKApp.db");
+                String sql="UPDATE Client SET Nom=?, Prenom=?, Postnom=?,Genre=?,fiss=?,cdmarch=? WHERE Tel=?";
+                PreparedStatement pst=conx.prepareStatement(sql);
+                pst.setString(1,nom );
+                pst.setString(2,prenom );
+                pst.setString(3,postnom );
+                pst.setString(4,genre);
+                pst.setString(5,codefiss );
+                pst.setString(6,codeprod );
+                pst.setString(7, tel);
+                int resultat=pst.executeUpdate();
+                if(resultat>0){
+                    JOptionPane.showMessageDialog(this,"Modification effectuée avec succès");
+                    tb.setValueAt(codeprod, row, 0);
+                    tb.setValueAt(nom, row, 1);
+                    tb.setValueAt(postnom, row, 2);
+                    tb.setValueAt(prenom, row, 3);
+                    tb.setValueAt(genre, row, 4);
+                    tb.setValueAt(tel, row, 5);
+                    tb.setValueAt(qtstock, row, 6);
+                    tb.setValueAt(codefiss, row, 7);
+                }
+                else{
+                    JOptionPane.showMessageDialog(this, "Aucune ligne trouvée");
+                }
+                conx.close();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Erreur"+e);
+            }
+        }
+    }//GEN-LAST:event_btnmodifierActionPerformed
+
+    private void tbMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbMouseClicked
+                                
+        // TODO add your handling code here:
+        int row=tb.getSelectedRow();
+        if(row!=-1){
+            txtcdprod.setSelectedItem(tb.getValueAt(row, 0).toString());
+            txtnom.setText(tb.getValueAt(row, 1).toString());
+            txtpost.setText(tb.getValueAt(row, 2).toString());
+            txtprn.setText(tb.getValueAt(row, 3).toString());
+            combogenr.setSelectedItem(tb.getValueAt(row, 4).toString());
+            txttel.setText(tb.getValueAt(row, 5).toString());
+            quantite.setText(tb.getValueAt(row, 6).toString());
+            cdfiss.setSelectedItem(tb.getValueAt(row, 7).toString());
+        }
+    }//GEN-LAST:event_tbMouseClicked
 
     /**
      * @param args the command line arguments
@@ -755,12 +830,12 @@ public class CAISSIER extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnmodifier;
     private javax.swing.JButton btnret;
     private javax.swing.JButton btnsuppr;
     private javax.swing.JButton btnval;
     private javax.swing.JComboBox<String> cdfiss;
     private javax.swing.JComboBox<String> combogenr;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
